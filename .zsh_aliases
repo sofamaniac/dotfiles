@@ -1,0 +1,19 @@
+alias ll="ls -a"
+alias lll="ls -alh"
+alias add_alias="${=EDITOR} ${ZDOTDIR:-$HOME}/.zsh_aliases; source ${ZDOTDIR:-$HOME}/.zsh_aliases"
+alias clr="clear"
+alias vi="vim"
+alias tt="task"
+alias todo="task add"
+
+function pdf(){
+	zathura $1 &
+}
+
+function mktex(){
+	mkdir $1
+	cd $1
+	cp ~/Nextcloud/cours/preamble.tex .
+	vim main.tex
+}
+
