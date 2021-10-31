@@ -1,3 +1,7 @@
+# the following one is necessary to ensure that kitty works properly when ssh-ing
+alias ssh="kitty +kitten ssh"
+
+
 alias ll="ls -a"
 alias lll="ls -alh"
 alias add_alias="${=EDITOR} ${ZDOTDIR:-$HOME}/.zsh_aliases; source ${ZDOTDIR:-$HOME}/.zsh_aliases"
