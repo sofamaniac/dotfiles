@@ -20,8 +20,9 @@ gaps inner 10
 exec --no-startup-id hsetroot -full ~/wall.png
 exec --no-startup-id xsettingsd &
 exec_always --no-startup-id picom --experimental-backends -b
-exec --no-startup-id nextcloud
+# exec --no-startup-id nextcloud
 exec --no-startup-id megasync
+exec --no-startup-id redshift
 exec "setxkbmap -layout fr,fr bepo"
 exec "setxkbmap -option 'grp:alt_shift_toggle'"
 
