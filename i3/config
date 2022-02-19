@@ -16,7 +16,7 @@ set $mod Mod4
 
 # Gaps
 for_window [class=".*"] border pixel 0
-gaps outer 0
+gaps outer 5
 gaps inner 5
 border_radius 10
 
@@ -28,9 +28,10 @@ exec_always --no-startup-id picom --experimental-backends -b
 exec --no-startup-id megasync
 exec --no-startup-id redshift
 exec_always --no-startup-id nm-applet
-exec_always --no-startup-id dunst
+exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
 #exec "setxkbmap -layout fr,fr bepo"
 #exec "setxkbmap -option 'grp:alt_shift_toggle'"
+exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
 
 # Menu
 bindsym $mod+d exec rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 
@@ -220,18 +221,7 @@ set $inactive-bg-color   #000000
 set $text-color          #f3f4f5
 set $inactive-text-color #676E7D
 set $urgent-bg-color     #E53935
-
-bar {
-  status_command i3blocks
-  colors {
-                background $bg-color
-                separator #757575
-                #                  border             background         text
-                focused_workspace  $bg-color          $bg-color          $text-color
-                inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
-                urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
-  }
-}
+set $transparent         #0000007F
 
 
 # window rules, you can find the window class using xpropc

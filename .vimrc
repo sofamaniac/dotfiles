@@ -32,6 +32,7 @@ nnoremap <expr> k v:count ? 'k' : 'gk'
 
 :setlocal foldmethod=syntax
 :set autoindent
+:set expandtab
 
 " Set up Merlin
 :set rtp+=/home/sofamaniac/.opam/default/share/merlin/vim
@@ -137,3 +138,7 @@ colorscheme PaperColor
 
 " Setting transparent background
 hi Normal guibg=NONE ctermbg=NONE
+" transparency for line numbers
+hi clear LineNr
+" transparency for sign column
+hi clear SignColumn
