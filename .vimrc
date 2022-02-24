@@ -73,6 +73,10 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 Plug 'preservim/nerdtree'
 let g:plug_window = 'noautocmd vertical topleft new'
 nnoremap <leader>e :NERDTreeToggle<CR>
+" automatically start NERDTree
+autocmd VimEnter * NERDTree
+autocmd BufWinEnter * NERDTreeMirror
+autocmd VimEnter * wincmd w
 
 " PaperColor (theme)
 Plug 'NLKNguyen/papercolor-theme'
@@ -133,7 +137,13 @@ nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
 
+noremap <F3> <Nop>
+noremap <F2> <Nop>
+noremap <F1> <Nop>
+
 colorscheme PaperColor
 
 " Setting transparent background
 hi Normal guibg=NONE ctermbg=NONE
+hi clear lineNr
+hi clear SignColumn

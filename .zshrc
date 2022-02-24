@@ -1,6 +1,14 @@
 DEFAULT_USER="sofamaniac"
 
+# bind media keys to avoid interferences with other programs
+zsh-widget-noop () {}
+zle -N zsh-widget-noop
+bindkey "^[[57428u" zsh-widget-noop
+bindkey "^[[57436u" zsh-widget-noop
+bindkey "^[[57435u" zsh-widget-noop
+
 export EDITOR=/usr/bin/vim
+export PATH=$PATH:/home/sofamaniac/bin
 # Import aliases
 . ~/.zsh_aliases
 
@@ -122,3 +130,6 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# Commands to run at start
+neofetch
+tt
