@@ -1,0 +1,84 @@
+{
+    // stacked split container with 3 children
+    "border": "normal",
+    "floating": "auto_off",
+    "layout": "stacked",
+    "marks": [],
+    "percent": null,
+    "type": "con",
+    "nodes": [
+        {
+            "border": "pixel",
+            "current_border_width": 0,
+            "floating": "auto_off",
+            "geometry": {
+               "height": 949,
+               "width": 1880,
+               "x": 20,
+               "y": 92
+            },
+            "marks": [],
+            "name": "💬-général - Discord",
+            "percent": 0.333333333333333,
+            "swallows": [
+               {
+               "class": "^discord$",
+               "instance": "^discord$",
+               "machine": "^sofamaniac\\-laptop$",
+               "title": "^💬\\-général\\ \\-\\ Discord$",
+               "window_role": "^browser\\-window$"
+               }
+            ],
+            "type": "con"
+        },
+        {
+            "border": "pixel",
+            "current_border_width": 0,
+            "floating": "auto_off",
+            "geometry": {
+               "height": 768,
+               "width": 1024,
+               "x": 448,
+               "y": 156
+            },
+            "marks": [],
+            "name": "Element [1] | Aurore | Bureau",
+            "percent": 0.333333333333333,
+            "swallows": [
+               {
+               "class": "^Element$",
+               "instance": "^element$",
+               "machine": "^sofamaniac\\-laptop$",
+               "title": "^Element\\ \\[1\\]\\ \\|\\ Aurore\\ \\|\\ Bureau$",
+               "window_role": "^browser\\-window$"
+               }
+            ],
+            "type": "con"
+        },
+        {
+            "border": "pixel",
+            "current_border_width": 0,
+            "floating": "auto_off",
+            "geometry": {
+               "height": 1051,
+               "width": 1024,
+               "x": 0,
+               "y": 0
+            },
+            "marks": [],
+            "name": "Inbox - antoine.grimod@gmail.com - Mozilla Thunderbird",
+            "percent": 0.333333333333333,
+            "swallows": [
+               {
+               "class": "^Thunderbird$",
+               "instance": "^Mail$",
+               "machine": "^sofamaniac\\-laptop$",
+               "title": "^Inbox\\ \\-\\ antoine\\.grimod\\@gmail\\.com\\ \\-\\ Mozilla\\ Thunderbird$",
+               "window_role": "^3pane$"
+               }
+            ],
+            "type": "con"
+        }
+    ]
+}
+
