@@ -10,9 +10,7 @@
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
 # setting up keyboard
-exec_always test -f ~/.Xkeymap && xkbcomp ~/.Xkeymap $DISPLAY
-exec_always sleep 2 ; setxkbmap -option caps:escape
-# the sleep is necessary to ensure that keymap was loaded before remapping caps
+exec_always --no-startup-id test -f ~/.Xkeymap && xkbcomp ~/.Xkeymap $DISPLAY
 
 set $mod Mod4
 
