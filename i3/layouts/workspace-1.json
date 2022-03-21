@@ -9,15 +9,11 @@
        "y": 0
     },
     "marks": [],
-    "name": "i3 - ArchWiki — Mozilla Firefox",
+    "name": "Firefox",
     "percent": 1,
     "swallows": [
        {
-       "class": "^firefox$",
-       "instance": "^Navigator$",
-       "machine": "^sofamaniac\\-laptop$",
-       "title": "^i3\\ \\-\\ ArchWiki\\ \\—\\ Mozilla\\ Firefox$",
-       "window_role": "^browser$"
+       "class": "^firefox$"
        }
     ],
     "type": "con"
