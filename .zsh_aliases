@@ -16,6 +16,7 @@ alias clr="clear"
 alias vi="vim"
 alias tt="task"
 alias todo="task add"
+alias vim="nvim"
 
 function pdf(){
 	zathura $1 &

@@ -134,4 +134,3 @@ unset __conda_setup
 
 # Commands to run at start
 neofetch
-tt

@@ -34,8 +34,9 @@ nnoremap <expr> k v:count ? 'k' : 'gk'
 :set autoindent
 :set expandtab
 
-" Set up Merlin
-:set rtp+=/home/sofamaniac/.opam/default/share/merlin/vim
+let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+execute "set rtp+=" . g:opamshare . "/merlin/vim"
+:set rtp^="/home/sofamaniac/Nextcloud/cours/M1/stage/goblint/analyzer/_opam/share/ocp-indent/vim"
 
 " Gestion des plugins
 call plug#begin('~/.vim/plugged')
@@ -78,6 +79,8 @@ nnoremap <leader>e :NERDTreeToggle<CR>
 autocmd VimEnter * NERDTree
 autocmd BufWinEnter * NERDTreeMirror
 autocmd VimEnter * wincmd w
+" automagically close vim if NERDTree is the last and only buffer
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " PaperColor (theme)
 Plug 'NLKNguyen/papercolor-theme'
@@ -112,6 +115,16 @@ set nocompatible
 filetype plugin on
 syntax on
 
+" vim fugitive (git integration)
+Plug 'tpope/vim-fugitive'
+
+" fzf for vim
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+" sugar for reasonml files
+Plug 'reasonml-editor/vim-reason-plus'
+
 call plug#end()
 
 let TEXPREAMBLE="~/cours/preamble.tex"
@@ -138,10 +151,6 @@ nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
 
-noremap <F3> <Nop>
-noremap <F2> <Nop>
-noremap <F1> <Nop>
-
 colorscheme PaperColor
 
 " Setting transparent background
@@ -151,3 +160,41 @@ hi clear lineNr
 hi clear LineNr
 " transparency for sign column
 hi clear SignColumn
+
+" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
+let s:opam_share_dir = system("opam config var share")
+let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+
+let s:opam_configuration = {}
+
+function! OpamConfOcpIndent()
+  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+endfunction
+let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+
+function! OpamConfOcpIndex()
+  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+endfunction
+let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+
+function! OpamConfMerlin()
+  let l:dir = s:opam_share_dir . "/merlin/vim"
+  execute "set rtp+=" . l:dir
+endfunction
+let s:opam_configuration['merlin'] = function('OpamConfMerlin')
+
+let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
+let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
+for tool in s:opam_packages
+  " Respect package order (merlin should be after ocp-index)
+  if count(s:opam_available_tools, tool) > 0
+    call s:opam_configuration[tool]()
+  endif
+endfor
+" ## end of OPAM user-setup addition for vim / base ## keep this line
+" ## added by OPAM user-setup for vim / ocp-indent ## 304d6b5a9cb3e1589c95f6f558adbf40 ## you can edit, but keep this line
+if count(s:opam_available_tools,"ocp-indent") == 0
+  source "/home/sofamaniac/Nextcloud/cours/M1/stage/goblint/analyzer/_opam/share/ocp-indent/vim/indent/ocaml.vim"
+endif
+" ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line
