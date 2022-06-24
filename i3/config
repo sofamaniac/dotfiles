@@ -61,6 +61,12 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec kitty
 
+# start file explorer
+bindsym $mod+e exec kitty -e lf
+
+# start firefox
+bindsym $mod+g exec firefox
+
 # kill focused window
 bindsym $mod+Shift+q kill
 
@@ -92,7 +98,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+c split h
+bindsym $mod+b split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -101,9 +107,9 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
+bindsym $mod+x layout stacking
 bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+c layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
