@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+file=$1
+w=$2
+h=$3
+x=$4
+y=$5
+
+case "$(file --brief --mime-type "$1")" in
+	image/*) kitty +icat --silent --transfer-mode file --place "${w}x${h}@${x}x${y}" "$file";;
+    */pdf) pdftotext "$file" - ;;
+	*) pistol "$file" ;;
+esac
+exit 1

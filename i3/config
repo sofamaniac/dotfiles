@@ -24,7 +24,6 @@ border_radius 10
 exec_always --no-startup-id hsetroot -full ~/wallpaper.png
 exec --no-startup-id xsettingsd &
 exec_always --no-startup-id picom --experimental-backends -b
-# exec --no-startup-id nextcloud
 exec --no-startup-id megasync
 exec --no-startup-id redshift
 exec_always --no-startup-id nm-applet
@@ -32,6 +31,10 @@ exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
 #exec "setxkbmap -layout fr,fr bepo"
 #exec "setxkbmap -option 'grp:alt_shift_toggle'"
 exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
+# notification for low battery
+exec --no-startup-id i3-battery-popup -n
+# kde connect system tray
+exec --no-startup-id kdeconnect-indicator
 
 # Menu
 bindsym $mod+d exec rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 
