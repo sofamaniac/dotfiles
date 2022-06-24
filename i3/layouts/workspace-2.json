@@ -1,7 +1,7 @@
 {
     "border": "normal",
     "floating": "auto_off",
-    "layout": "stacked",
+    "layout": "tabbed",
     "percent": null,
     "type": "con",
     "nodes": [
