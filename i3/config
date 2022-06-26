@@ -73,6 +73,9 @@ bindsym $mod+Shift+q kill
 # screenshot
 bindsym $mod+Shift+p exec maim -u ~/$(date +%s).png
 
+# change background
+bindsym $mod+t exec feh --randomize --bg-fill ~/dotfiles/wallpapers/*
+
 # change focus
 bindsym $mod+j focus down
 bindsym $mod+k focus up
