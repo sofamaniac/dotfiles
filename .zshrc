@@ -11,6 +11,8 @@ export EDITOR=/usr/bin/vim
 export PATH=$PATH:/home/sofamaniac/bin
 # Import aliases
 . ~/.zsh_aliases
+source /usr/share/fzf/key-bindings.zsh
+source /usr/share/fzf/completion.zsh
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -84,7 +86,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git zsh-fzf-history-search)
 
 source $ZSH/oh-my-zsh.sh
 

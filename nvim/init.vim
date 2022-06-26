@@ -140,6 +140,9 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " orgmode
 Plug 'nvim-neorg/neorg' | Plug 'nvim-lua/plenary.nvim'
 
+" nice icons
+Plug 'ryanoasis/vim-devicons'
+
 call plug#end()
 
 let g:PaperColor_Theme_Options={

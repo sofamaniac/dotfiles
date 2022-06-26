@@ -21,7 +21,7 @@ gaps inner 5
 border_radius 10
 
 # autostart
-exec_always --no-startup-id hsetroot -full ~/wallpaper.png
+exec_always --no-startup-id feh --randomize --bg-fill ~/dotfiles/wallpapers/*
 exec --no-startup-id xsettingsd &
 exec_always --no-startup-id picom --experimental-backends -b
 exec --no-startup-id megasync
