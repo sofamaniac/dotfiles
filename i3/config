@@ -10,7 +10,7 @@
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
 # setting keyboard
-exec_always setxkbmap -option caps:escape
+exec_always --no-startup-id setxkbmap -option caps:escape
 
 set $mod Mod4
 
@@ -32,6 +32,7 @@ exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
 #exec "setxkbmap -layout fr,fr bepo"
 #exec "setxkbmap -option 'grp:alt_shift_toggle'"
 exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
+exec_always --no-startup-id kdeconnect-indicator
 
 # Menu
 bindsym $mod+d exec rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 

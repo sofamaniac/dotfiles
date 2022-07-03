@@ -1,0 +1,19 @@
+ffmpegthumbnailer
+ImageMagick
+poppler
+epub-thumbnailer
+wkhtmltopdf
+bat (optional - color highlight for text files)
+chafa (optional - for image preview over SSH or inside Wayland session)
+unzip (optional - for .zip and .jar files)
+7z (optional - for .7z files)
+unrar (optional - for .rar files)
+catdoc (optional - for .doc files)
+docx2txt (optional - for .docx files)
+odt2txt (optional - for .odt and *.ods files)
+gnumeric (optional - for .xls and .xlsx files)
+exiftool (optional - for music files)
+iso-info (optional - for .iso files)
+transmission (optional - for .torrent files)
+mcomix (optional - for .cbz and .cbr files)
+
