@@ -1,0 +1,95 @@
+# GOOD DEFAULTS {{{
+# interpreter for shell commands
+set shell bash
+
+# set '-eu' options for shell commands
+# These options are used to have safer shell commands. Option '-e' is used to
+# exit on error and option '-u' is used to give error for unset variables.
+# Option '-f' disables pathname expansion which can be useful when $f, $fs, and
+# $fx variables contain names with '*' or '?' characters. However, this option
+# is used selectively within individual commands as it can be limiting at
+# times.
+set shellopts '-eu'
+
+# set internal field separator (IFS) to "\n" for shell commands
+# This is useful to automatically split file names in $fs and $fx properly
+# since default file separator used in these variables (i.e. 'filesep' option)
+# is newline. You need to consider the values of these options and create your
+# commands accordingly.
+set ifs "\n"
+
+# leave some space at the top and the bottom of the screen
+set scrolloff 10
+
+# others
+set drawbox
+set previewer '~/.config/lf/lf_kitty_preview'
+set cleaner '~/.config/lf/lf_kitty_clean'
+set icons
+set autoquit on
+# set hidden
+# }}}
+
+# FUNCTIONS {{{
+# define a custom 'open' command
+# This command is called when current file is not a directory. You may want to
+# use either file extensions and/or mime types here. Below uses an editor for
+# text files and a file opener for the rest.
+cmd open ${{
+    test -L $f && f=$(readlink -f $f)
+    case $(file --mime-type $f -b) in
+        text/*) $EDITOR $fx;;
+	image/png) sxiv -b $fx &;;
+	image/j*) sxiv -b $fx &;;
+	image/xcf) gimp $fx;;
+	video/*) mpv $fx;;
+	audio/*) mpv --no-video $fx;;
+	*/pdf) zathura $fx &;;
+    esac
+}}
+
+# bulk-rename
+cmd bulk-rename ${{
+    old="$(mktemp)"
+    new="$(mktemp)"
+    if [ -n "$fs" ]; then
+        fs="$(basename $fs)"
+    else
+        fs="$(ls)"
+    fi
+    printf '%s\n' "$fs" >"$old"
+    printf '%s\n' "$fs" >"$new"
+    $EDITOR "$new"
+    [ "$(wc -l < "$new")" -ne "$(wc -l < "$old")" ] && exit
+    paste "$old" "$new" | while IFS= read -r names; do
+        src="$(printf '%s' "$names" | cut -f1)"
+        dst="$(printf '%s' "$names" | cut -f2)"
+        if [ "$src" = "$dst" ] || [ -e "$dst" ]; then
+            continue
+        fi
+        mv -- "$src" "$dst"
+    done
+    rm -- "$old" "$new"
+    lf -remote "send $id unselect"
+}}
+
+cmd mkdir %mkdir "$@"
+cmd touch %touch "$@"
+# }}}
+
+# MAPS {{{
+# use enter for shell commands
+map <enter> shell
+
+# execute current file (must be executable)
+map x $$f
+map X !$f
+
+# general
+map <backspace2> push :delete<enter>
+map a set hidden!
+map R bulk-rename
+map m push :touch<space>
+map M push :mkdir<space>
+# }}}
+

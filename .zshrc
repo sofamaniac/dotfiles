@@ -1,8 +1,18 @@
 DEFAULT_USER="sofamaniac"
 
+# bind media keys to avoid interferences with other programs
+zsh-widget-noop () {}
+zle -N zsh-widget-noop
+bindkey "^[[57428u" zsh-widget-noop
+bindkey "^[[57436u" zsh-widget-noop
+bindkey "^[[57435u" zsh-widget-noop
+
 export EDITOR=/usr/bin/vim
+export PATH=$PATH:/home/sofamaniac/bin
 # Import aliases
 . ~/.zsh_aliases
+source /usr/share/fzf/key-bindings.zsh
+source /usr/share/fzf/completion.zsh
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -15,6 +25,8 @@ export ZSH="/home/sofamaniac/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="spaceship"
+# changing colors
+SPACESHIP_DIR_COLOR="#3BC5DE"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -74,7 +86,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git zsh-fzf-history-search)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -122,3 +134,5 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# Commands to run at start
+neofetch

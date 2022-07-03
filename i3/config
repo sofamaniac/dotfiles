@@ -9,22 +9,32 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
+# setting up keyboard
+exec_always --no-startup-id test -f ~/.Xkeymap && xkbcomp ~/.Xkeymap $DISPLAY
+
 set $mod Mod4
 
 # Gaps
 for_window [class=".*"] border pixel 0
-gaps outer 10
-gaps inner 10
+gaps outer 5
+gaps inner 5
+border_radius 10
 
 # autostart
-exec --no-startup-id hsetroot -full ~/wall.png
+exec_always --no-startup-id feh --randomize --bg-fill ~/dotfiles/wallpapers/*
 exec --no-startup-id xsettingsd &
 exec_always --no-startup-id picom --experimental-backends -b
-# exec --no-startup-id nextcloud
 exec --no-startup-id megasync
 exec --no-startup-id redshift
-exec "setxkbmap -layout fr,fr bepo"
-exec "setxkbmap -option 'grp:alt_shift_toggle'"
+exec_always --no-startup-id nm-applet
+exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
+#exec "setxkbmap -layout fr,fr bepo"
+#exec "setxkbmap -option 'grp:alt_shift_toggle'"
+exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
+# notification for low battery
+exec --no-startup-id i3-battery-popup -n
+# kde connect system tray
+exec --no-startup-id kdeconnect-indicator
 
 # Menu
 bindsym $mod+d exec rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 
@@ -51,11 +61,20 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec kitty
 
+# start file explorer
+bindsym $mod+e exec kitty -e lf
+
+# start firefox
+bindsym $mod+g exec firefox
+
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # screenshot
 bindsym $mod+Shift+p exec maim -u ~/$(date +%s).png
+
+# change background
+bindsym $mod+t exec feh --randomize --bg-fill ~/dotfiles/wallpapers/*
 
 # change focus
 bindsym $mod+j focus down
@@ -82,7 +101,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+c split h
+bindsym $mod+b split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -91,9 +110,9 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
+bindsym $mod+x layout stacking
 bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+c layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -214,27 +233,11 @@ set $inactive-bg-color   #000000
 set $text-color          #f3f4f5
 set $inactive-text-color #676E7D
 set $urgent-bg-color     #E53935
-
-bar {
-  status_command i3blocks
-  colors {
-                background $bg-color
-                separator #757575
-                #                  border             background         text
-                focused_workspace  $bg-color          $bg-color          $text-color
-                inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
-                urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
-  }
-}
+set $transparent         #0000007F
 
 
 # window rules, you can find the window class using xpropc
-assign [class=URxvt] 1
-assign [class=Firefox|Transmission-gtk] 2
-assign [class=Thunar|File-roller] 3
-assign [class=Geany|Evince|Gucharmap|Soffice|libreoffice*] 4
-assign [class=Audacity|Vlc|mpv|Ghb|Xfburn|Gimp*|Inkscape] 5
-assign [class=Lxappearance|System-config-printer.py|Lxtask|GParted|Pavucontrol|Exo-helper*|Lxrandr|Arandr] 6
-for_window [class=Viewnior|feh|Audacious|File-roller|Lxappearance|Lxtask|Pavucontrol] floating enable
-for_window [class=URxvt|Firefox|Geany|Evince|Soffice|libreoffice*|mpv|Ghb|Xfburn|Gimp*|Inkscape|Vlc|Lxappearance|Audacity] focus
-for_window [class=Xfburn|GParted|System-config-printer.py|Lxtask|Pavucontrol|Exo-helper*|Lxrandr|Arandr] focus
+assign [class="discord"] 2
+
+# layout restoring
+exec --no-startup-id "/home/sofamaniac/dotfiles/i3/layout_restore.sh"
