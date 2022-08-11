@@ -1,9 +1,15 @@
 #!/bin/bash
-PLAYER_LOCATION="~/dotfiles/polybar/modules/mpris/player"
+PLAYER_LOCATION="/home/sofamaniac/dotfiles/polybar/modules/mpris/player"
+selected_player=$(cat "$PLAYER_LOCATION")
 players=$(playerctl -l 2> /dev/null)
+players=("default" $players)
 i=0
-menu="Default,echo default > $PLAYER_LOCATION\\n"
-for s in $players; do
-	menu="$menu$s,echo $s > $PLAYER_LOCATION\\n"
+menu=""
+for s in "${players[@]}"; do
+	if [ "$s" = "$selected_player" ]; then
+		menu="$menu$s,echo $s > $PLAYER_LOCATION,/usr/share/icons/breeze-dark/emblems/16/checkmark.svg\\n"
+	else
+		menu="$menu$s,echo $s > $PLAYER_LOCATION\\n"
+	fi
 done
 printf "$menu" | jgmenu --simple --at-pointer
