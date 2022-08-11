@@ -5,17 +5,32 @@
 :set noexpandtab
 :set shiftwidth=4
 
-" :set clipboard=unnamedplus
+" add mouse support
+set mouse=a
 
-:inoremap <C-L> <Esc>
+
+filetype plugin on
+set omnifunc=syntaxcomplete#Complete
 
 " We change the way movements are handle to have a better behaviour with
 " wrapped lines, ie the cursor moves to match what is display instead of
 " just following line numbers, but command like 2j still works as
 " expected using the relative numbers
-" For an clearer explanation see : https://stackoverflow.com/questions/20975928/moving-the-cursor-through-long-soft-wrapped-lines-in-vim 
+" For an clearer explanation see : https://stackoverflow.com/a/21000307
+
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
+
+" remap double esc in terminal mode to exit back to normal mode
+tnoremap <Esc><Esc> <C-\><C-n>
+
+" config terminal buffers
+function! SetTerminalOptions()
+    setlocal nospell
+    setlocal nonumber
+    setlocal nornu
+endfunction
+au TermOpen * call SetTerminalOptions()
 
 " Some custom commands
 :command -nargs=0 Shortcuts :vsplit ~/Nextcloud/vim_shortcuts.txt
@@ -32,11 +47,6 @@ nnoremap <expr> k v:count ? 'k' : 'gk'
 
 :setlocal foldmethod=syntax
 :set autoindent
-:set expandtab
-
-let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
-execute "set rtp+=" . g:opamshare . "/merlin/vim"
-:set rtp^="/home/sofamaniac/Nextcloud/cours/M1/stage/goblint/analyzer/_opam/share/ocp-indent/vim"
 
 " Gestion des plugins
 call plug#begin('~/.vim/plugged')
@@ -55,10 +65,10 @@ let g:vimtex_compiler_latexmk = { 'options' : [
 	\ '-synctex=1',
 	\ '-interaction=nonstopmode',
 	\ '-cd', 
-	\ '-outdir=./aux'
+	\ '-outdir=./_aux'
 	\ ],
 	\}
-let g:vimtex_compiler_latexmk = { 'build_dir' : './aux' }
+let g:vimtex_compiler_latexmk = { 'build_dir' : './_aux' }
 " Changed the output dir for latexmk, and added cmd in ~/.latexmkrc to move pdf to right folder
 
 " Ultisnips configuration
@@ -82,6 +92,8 @@ autocmd VimEnter * wincmd w
 " automagically close vim if NERDTree is the last and only buffer
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
+" status bar
+Plug 'itchyny/lightline.vim'
 " PaperColor (theme)
 Plug 'NLKNguyen/papercolor-theme'
 set t_Co=256   " This is may or may not needed.
@@ -90,13 +102,6 @@ set background=dark
 " undotree
 Plug 'mbbill/undotree'
 nnoremap <F5> :UndotreeToggle<CR>
-
-" coq in vim
-Plug 'whonore/Coqtail'
-
-" status bar
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 
 " coc.nvim
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -115,9 +120,6 @@ set nocompatible
 filetype plugin on
 syntax on
 
-" vim fugitive (git integration)
-Plug 'tpope/vim-fugitive'
-
 " fzf for vim
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -125,7 +127,37 @@ Plug 'junegunn/fzf.vim'
 " sugar for reasonml files
 Plug 'reasonml-editor/vim-reason-plus'
 
+" floaterm
+Plug 'voldikss/vim-floaterm'
+nnoremap <leader>t :FloatermToggle<CR>
+
+" indentation guide
+Plug 'lukas-reineke/indent-blankline.nvim'
+
+" treesitter
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+" orgmode
+Plug 'nvim-neorg/neorg' | Plug 'nvim-lua/plenary.nvim'
+
+" nice icons
+Plug 'ryanoasis/vim-devicons'
+
 call plug#end()
+
+let g:PaperColor_Theme_Options={
+            \ 'theme': {
+                \ 'default': {
+                    \ 'transparent_background': 1,
+                    \ 'override' : {
+                        \ 'color05': ['#2F7A47', '']
+                    \}
+                \},
+            \}
+        \}
+let g:ariline_theme='papercolor'
+let g:lightline = { 'colorscheme': 'PaperColor' }
+colorscheme PaperColor
 
 let TEXPREAMBLE="~/cours/preamble.tex"
 " Templates handling
@@ -138,8 +170,12 @@ augroup templates
 	autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
 augroup END
 
-" Setting options and shortcuts for buffer
+" Treesitter configuration
+lua << EOF
+require('config')
+EOF
 
+" Setting options and shortcuts for buffer
 set hidden
 
 " We remap (/) to [/] to make shortcuts easier
@@ -151,18 +187,29 @@ nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
 
-colorscheme PaperColor
+" Found on Reddit
+" " Copy to clipboard
+vnoremap  <leader>y  "+y
+nnoremap  <leader>Y  "+yg_
+nnoremap  <leader>y  "+y
+nnoremap  <leader>yy  "+yy
+
+" " Paste from clipboard
+nnoremap <leader>p "+p
+nnoremap <leader>P "+P
+vnoremap <leader>p "+p
+vnoremap <leader>P "+P
 
 " Setting transparent background
 hi Normal guibg=NONE ctermbg=NONE
-hi clear lineNr
+hi Conceal ctermfg=109 guifg=#83a598 guibg=None ctermbg=None
 " transparency for line numbers
 hi clear LineNr
 " transparency for sign column
 hi clear SignColumn
 
 " ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
-let s:opam_share_dir = system("opam config var share")
+let s:opam_share_dir = system("opam var share")
 let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
 
 let s:opam_configuration = {}
@@ -193,8 +240,8 @@ for tool in s:opam_packages
   endif
 endfor
 " ## end of OPAM user-setup addition for vim / base ## keep this line
-" ## added by OPAM user-setup for vim / ocp-indent ## a43315c15debbe77497faea183653f80 ## you can edit, but keep this line
+" ## added by OPAM user-setup for vim / ocp-indent ## 304d6b5a9cb3e1589c95f6f558adbf40 ## you can edit, but keep this line
 if count(s:opam_available_tools,"ocp-indent") == 0
-  source "/home/sofamaniac/Nextcloud/cours/M1/stage/goblint/main-analyzer/_opam/share/ocp-indent/vim/indent/ocaml.vim"
+  source "/home/sofamaniac/Nextcloud/cours/M1/stage/goblint/analyzer/_opam/share/ocp-indent/vim/indent/ocaml.vim"
 endif
 " ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line

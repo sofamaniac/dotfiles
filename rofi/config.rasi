@@ -3,5 +3,6 @@
 configuration {
   show-icons:         true;
   icon-theme:         "Papirus";
+  run-shell-command: "kitty --hold {cmd}";
 }
 @theme "/usr/share/rofi/themes/android_notification.rasi"
