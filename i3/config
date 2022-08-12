@@ -38,7 +38,7 @@ exec --no-startup-id i3-battery-popup -n
 exec --no-startup-id kdeconnect-indicator
 
 # Menu
-bindsym $mod+d exec rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 
+bindsym $mod+d exec ~/.config/rofi/bin/launcher_colorful
 
 bindsym $mod+Shift+x exec ~/auto_clicker.sh
 
@@ -132,9 +132,9 @@ bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 
 # media control
-bindsym XF86AudioPlay exec playerctl play-pause
-bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioPlay exec ~/dotfiles/polybar/modules/mpris/player-control.sh play-pause
+bindsym XF86AudioNext exec ~/dotfiles/polybar/modules/mpris/player-control.sh next
+bindsym XF86AudioPrev exec ~/dotfiles/polybar/modules/mpris/player-control.sh previous
 
 
 # focus the child container
