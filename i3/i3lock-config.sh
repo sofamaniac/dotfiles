@@ -12,7 +12,6 @@
 # i3lock -i $PICTURE
 # rm $PICTURE
 
-#!/bin/bash
 ICON=$HOME/lock_icon.png
 TMPBG=/tmp/screen.png
 scrot $TMPBG

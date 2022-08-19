@@ -152,6 +152,9 @@ Plug 'nvim-neorg/neorg' | Plug 'nvim-lua/plenary.nvim'
 " nice icons
 Plug 'ryanoasis/vim-devicons'
 
+" syntax support for eww config language
+Plug 'elkowar/yuck.vim'
+
 call plug#end()
 
 let g:PaperColor_Theme_Options={

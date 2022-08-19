@@ -24,6 +24,7 @@ gaps inner 5
 border_radius 10
 
 # autostart
+exec_always --no-startup-id playerctld daemon
 exec_always --no-startup-id ~/.config/i3/bg_setter.sh
 exec --no-startup-id xsettingsd &
 exec_always --no-startup-id picom --experimental-backends -b
@@ -40,7 +41,9 @@ exec --no-startup-id i3-battery-popup -n
 exec --no-startup-id kdeconnect-indicator
 
 # Menu
-bindsym $mod+d exec rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 
+bindsym $mod+d exec ~/.config/rofi/bin/launcher_colorful
+
+bindsym $mod+Shift+x exec ~/auto_clicker.sh
 
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -126,10 +129,16 @@ bindsym $mod+space focus mode_toggle
 # focus the parent container
 bindsym $mod+a focus parent
 
-# volume controle
+# volume control
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# media control
+bindsym XF86AudioPlay exec ~/dotfiles/polybar/modules/mpris/player-control.sh play-pause
+bindsym XF86AudioNext exec ~/dotfiles/polybar/modules/mpris/player-control.sh next
+bindsym XF86AudioPrev exec ~/dotfiles/polybar/modules/mpris/player-control.sh previous
+
 
 # focus the child container
 #bindsym $mod+d focus child
