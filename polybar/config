@@ -60,7 +60,7 @@ font-2 = siji:pixelsize=10;1
 
 modules-left = i3
 modules-center = date
-modules-right = filesystem backlight pulseaudio memory cpu wlan eth battery temperature 
+modules-right = filesystem pulseaudio memory cpu wlan eth battery temperature 
 
 tray-position = right
 tray-padding = 2

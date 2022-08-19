@@ -1,0 +1,3 @@
+[submodule "i3-gaps-rounded"]
+	path = i3-gaps-rounded
+	url = https://github.com/FinnHering/i3

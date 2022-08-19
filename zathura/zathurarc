@@ -20,7 +20,7 @@ set guioptions ""
 # zathurarc-dark
 
 set font "inconsolata 15"
-set default-bg rgba(0,0,0,0.65)
+set default-bg rgba(0,0,0,0.50)
 set default-fg "#FFFFFF" #01
 
 set statusbar-fg "#B0B0B0" #04

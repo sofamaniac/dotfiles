@@ -21,6 +21,10 @@ set omnifunc=syntaxcomplete#Complete
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
 
+" shortcuts for tab navigation
+nnoremap H gT
+nnoremap L gt
+
 " remap double esc in terminal mode to exit back to normal mode
 tnoremap <Esc><Esc> <C-\><C-n>
 
@@ -119,6 +123,11 @@ Plug 'vimwiki/vimwiki'
 set nocompatible
 filetype plugin on
 syntax on
+let g:vimwiki_list = [{'path': '~/vimwiki/',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
+
+" glow.nvim for rendering markdown in vim
+Plug 'ellisonleao/glow.nvim', {'branch': 'main'}
 
 " fzf for vim
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
