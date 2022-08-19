@@ -1,3 +1,6 @@
 [submodule "rofi/rofi-themes"]
 	path = rofi/rofi-themes
 	url = https://github.com/adi1090x/rofi.git
+[submodule "i3-gaps-rounded"]
+	path = i3-gaps-rounded
+	url = https://github.com/FinnHering/i3

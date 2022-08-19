@@ -11,8 +11,8 @@ export EDITOR=/usr/bin/vim
 export PATH=$PATH:/home/sofamaniac/bin
 # Import aliases
 . ~/.zsh_aliases
-source /usr/share/fzf/key-bindings.zsh
-source /usr/share/fzf/completion.zsh
+#source /usr/share/fzf/key-bindings.zsh
+#source /usr/share/fzf/completion.zsh
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH

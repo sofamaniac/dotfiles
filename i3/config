@@ -10,7 +10,10 @@
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
 # setting up keyboard
-exec_always --no-startup-id test -f ~/.Xkeymap && xkbcomp ~/.Xkeymap $DISPLAY
+exec_always --no-startup-id setxkbmap -option caps:escape
+
+# dark mode for gnome
+exec_always --no-startup-id /usr/libexec/gsd-xsettings
 
 set $mod Mod4
 
@@ -22,7 +25,7 @@ border_radius 10
 
 # autostart
 exec_always --no-startup-id playerctld daemon
-exec_always --no-startup-id feh --randomize --bg-fill ~/dotfiles/wallpapers/*
+exec_always --no-startup-id ~/.config/i3/bg_setter.sh
 exec --no-startup-id xsettingsd &
 exec_always --no-startup-id picom --experimental-backends -b
 exec --no-startup-id megasync
@@ -77,7 +80,7 @@ bindsym $mod+Shift+q kill
 bindsym $mod+Shift+p exec maim -u ~/$(date +%s).png
 
 # change background
-bindsym $mod+t exec feh --randomize --bg-fill ~/dotfiles/wallpapers/*
+bindsym $mod+t exec ~/.config/i3/bg_setter.sh
 
 # change focus
 bindsym $mod+j focus down
