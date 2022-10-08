@@ -8,6 +8,8 @@
 " add mouse support
 set mouse=a
 
+setlocal foldmethod=syntax
+set autoindent
 
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
@@ -25,6 +27,9 @@ nnoremap <expr> k v:count ? 'k' : 'gk'
 nnoremap H gT
 nnoremap L gt
 
+let g:mapleader = "\<Space>"
+nnoremap <Space><Space> :nohlsearch<CR>
+
 " remap double esc in terminal mode to exit back to normal mode
 tnoremap <Esc><Esc> <C-\><C-n>
 
@@ -37,20 +42,11 @@ endfunction
 au TermOpen * call SetTerminalOptions()
 
 " Some custom commands
-:command -nargs=0 Shortcuts :vsplit ~/Nextcloud/vim_shortcuts.txt
+command -nargs=0 Shortcuts :vsplit ~/Nextcloud/vim_shortcuts.txt
 
 " Syntax coloration
-:syntax on
+syntax on
 
-" spellcheck
-:set spell
-:set spelllang=fr,en_gb
-:hi clear SpellBad
-:hi SpellBad cterm=underline
-:hi SpellBad ctermfg=001
-
-:setlocal foldmethod=syntax
-:set autoindent
 
 " Gestion des plugins
 call plug#begin('~/.vim/plugged')
@@ -80,19 +76,12 @@ Plug 'sirver/ultisnips'
 let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsJumpForwardTrigger='<tab>'
 let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
-set runtimepath+=~/.vim/snippets/UltiSnips
-
-" Markdown Preview
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+let g:UltiSnipsSnippetDirectories = ["~/.config/nvim/UltiSnips"]
 
 " Nerdtree
 Plug 'preservim/nerdtree'
 let g:plug_window = 'noautocmd vertical topleft new'
 nnoremap <leader>e :NERDTreeToggle<CR>
-" automatically start NERDTree
-autocmd VimEnter * NERDTree
-autocmd BufWinEnter * NERDTreeMirror
-autocmd VimEnter * wincmd w
 " automagically close vim if NERDTree is the last and only buffer
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
@@ -105,7 +94,7 @@ set background=dark
 
 " undotree
 Plug 'mbbill/undotree'
-nnoremap <F5> :UndotreeToggle<CR>
+nnoremap <leader>u :UndotreeToggle<CR>
 
 " coc.nvim
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -129,13 +118,6 @@ let g:vimwiki_list = [{'path': '~/vimwiki/',
 " glow.nvim for rendering markdown in vim
 Plug 'ellisonleao/glow.nvim', {'branch': 'main'}
 
-" fzf for vim
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-
-" sugar for reasonml files
-Plug 'reasonml-editor/vim-reason-plus'
-
 " floaterm
 Plug 'voldikss/vim-floaterm'
 nnoremap <leader>t :FloatermToggle<CR>
@@ -146,14 +128,16 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 " treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-" orgmode
-Plug 'nvim-neorg/neorg' | Plug 'nvim-lua/plenary.nvim'
-
 " nice icons
 Plug 'ryanoasis/vim-devicons'
 
-" syntax support for eww config language
-Plug 'elkowar/yuck.vim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
+" Find files using Telescope command-line sugar.
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 call plug#end()
 
@@ -219,41 +203,25 @@ hi Conceal ctermfg=109 guifg=#83a598 guibg=None ctermbg=None
 hi clear LineNr
 " transparency for sign column
 hi clear SignColumn
-
-" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
-let s:opam_share_dir = system("opam var share")
-let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
-
-let s:opam_configuration = {}
-
-function! OpamConfOcpIndent()
-  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
-endfunction
-let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
-
-function! OpamConfOcpIndex()
-  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
-endfunction
-let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
-
-function! OpamConfMerlin()
-  let l:dir = s:opam_share_dir . "/merlin/vim"
-  execute "set rtp+=" . l:dir
-endfunction
-let s:opam_configuration['merlin'] = function('OpamConfMerlin')
-
-let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
-let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
-let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
-for tool in s:opam_packages
-  " Respect package order (merlin should be after ocp-index)
-  if count(s:opam_available_tools, tool) > 0
-    call s:opam_configuration[tool]()
-  endif
-endfor
-" ## end of OPAM user-setup addition for vim / base ## keep this line
-" ## added by OPAM user-setup for vim / ocp-indent ## 304d6b5a9cb3e1589c95f6f558adbf40 ## you can edit, but keep this line
-if count(s:opam_available_tools,"ocp-indent") == 0
-  source "/home/sofamaniac/Nextcloud/cours/M1/stage/goblint/analyzer/_opam/share/ocp-indent/vim/indent/ocaml.vim"
-endif
-" ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line
+" spellcheck
+setlocal spell
+set spelllang=fr,en_gb
+inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+hi clear SpellBad
+hi SpellBad cterm=underline
+hi SpellBad ctermfg=001
+hi clear SpellCap
+hi SpellCap cterm=underline
+hi SpellCap ctermfg=166
+hi clear SpellRare
+hi SpellRare cterm=underline
+hi SpellRare ctermfg=180
+hi clear SpellLocal
+hi SpellLocal cterm=underline
+hi SpellLocal ctermfg=120
+" Don't mark URL-like things as spelling errors
+fun! UrlNoSpell()
+	syn match UrlNoSpell '\w\+:\/\/[^[:space:]]\+' contains=@NoSpell transparent
+	syn cluster Spell add=UrlNoSpell
+endfun
+autocmd BufRead,BufNewFile * :call UrlNoSpell()

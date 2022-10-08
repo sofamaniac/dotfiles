@@ -16,17 +16,3 @@ require('nvim-treesitter.configs').setup {
     additional_vim_regex_highlighting = true,
   },
 }
-require('neorg').setup {
-    load = {
-        ["core.defaults"] = {},
-        ["core.norg.dirman"] = {
-            config = {
-                workspaces = {
-                    work = "~/.notes/work",
-                    home = "~/.notes/home",
-                }
-            }
-        },
-        ["core.norg.concealer"] = {}
-    }
-}

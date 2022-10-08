@@ -15,30 +15,11 @@
                "x": 9,
                "y": 69
             },
-            "name": "Element [10] | Aurore | Conseil d'administration",
+            "name": "Element",
             "percent": 0.25,
             "swallows": [
                {
                 "class": "^Element$"
-               }
-            ],
-            "type": "con"
-        },
-        {
-            "border": "pixel",
-            "current_border_width": 0,
-            "floating": "auto_off",
-            "geometry": {
-               "height": 955,
-               "width": 1902,
-               "x": 9,
-               "y": 89
-            },
-            "name": "Slack | Michael Schwarz | goblint",
-            "percent": 0.25,
-            "swallows": [
-               {
-                "class": "^Slack$"
                }
             ],
             "type": "con"
@@ -53,11 +34,11 @@
                "x": 0,
                "y": 0
             },
-            "name": "Inbox - antoine.grimod@gmail.com - Mozilla Thunderbird",
+            "name": "Mozilla Thunderbird",
             "percent": 0.25,
             "swallows": [
                {
-                "class": "^Thunderbird$"
+                "class": "^thunderbird$"
                }
             ],
             "type": "con"
@@ -72,7 +53,7 @@
                "x": 9,
                "y": 89
             },
-            "name": "flood - Discord",
+            "name": "Discord",
             "percent": 0.25,
             "swallows": [
                {
