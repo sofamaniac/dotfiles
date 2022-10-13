@@ -1,5 +1,6 @@
 # the following one is necessary to ensure that kitty works properly when ssh-ing
-alias ssh="kitty +kitten ssh"
+# Disable because it prevents motd to be displayed when logging in
+# alias ssh="kitty +kitten ssh"
 
 # the following alias allows to display images in terminal
 alias icat="kitty +kitten icat"

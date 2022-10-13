@@ -27,18 +27,25 @@ border_radius 10
 exec_always --no-startup-id playerctld daemon
 exec_always --no-startup-id ~/.config/i3/bg_setter.sh
 exec --no-startup-id xsettingsd &
-exec_always --no-startup-id picom --experimental-backends -b
-exec --no-startup-id megasync
+exec --no-startup-id picom --experimental-backends -b
+exec --no-startup-id nextcloud
 exec --no-startup-id redshift
-exec_always --no-startup-id nm-applet
-exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
+exec --no-startup-id nm-applet
+exec --no-startup-id dunst -config ~/.config/dunst/dunstrc
 #exec "setxkbmap -layout fr,fr bepo"
 #exec "setxkbmap -option 'grp:alt_shift_toggle'"
 exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
-# notification for low battery
-exec --no-startup-id i3-battery-popup -n
 # kde connect system tray
 exec --no-startup-id kdeconnect-indicator
+
+# laptop specific programs
+# notification for low battery
+exec --no-startup-id i3-battery-popup -n
+# 2 in 1 pc handling
+exec --no-startup-id watch_tablet
+exec --no-startup-id screenrotator
+exec --no-startup-id touchegg
+exec --no-startup-id onboard
 
 # Menu
 bindsym $mod+d exec ~/.config/rofi/bin/launcher_colorful
@@ -48,7 +55,7 @@ bindsym $mod+Shift+x exec ~/auto_clicker.sh
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 8
+font Hack:monospace 8
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -135,9 +142,10 @@ bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 
 # media control
-bindsym XF86AudioPlay exec ~/dotfiles/polybar/modules/mpris/player-control.sh play-pause
-bindsym XF86AudioNext exec ~/dotfiles/polybar/modules/mpris/player-control.sh next
-bindsym XF86AudioPrev exec ~/dotfiles/polybar/modules/mpris/player-control.sh previous
+set $playerctl_path /home/sofamaniac/dotfiles/polybar/modules/mpris/player-control.sh
+bindsym XF86AudioPlay exec $playerctl_path play-pause
+bindsym XF86AudioNext exec $playerctl_path next
+bindsym XF86AudioPrev exec $playerctl_path previous
 
 
 # focus the child container
