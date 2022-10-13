@@ -1,7 +1,7 @@
 neovim
+feh
 dunst
 i3
-i3blocks
 rofi
 kitty
 redshift
@@ -10,4 +10,8 @@ picom
 lf
 pistol
 polybar
+light
+networkmanager
+network-manager-applet
+playerctl
 # some kind of extended font for symbols
