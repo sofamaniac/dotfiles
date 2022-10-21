@@ -2,7 +2,8 @@
 
 # installing packages available directly
 PACKAGES=(
-	"i3"
+	"picom"
+	"neofetch"
 	"dunst"
 	"kitty"
 	"zsh"
@@ -14,7 +15,7 @@ PACKAGES=(
 	"network-manager-applet"
 	"playerctl"
 	"feh"
-	"nextcloud"
+	"nextcloud-client"
 	"syncthing"
 	"discord"
 	"element-desktop"
@@ -22,28 +23,109 @@ PACKAGES=(
 	"aerc"
 	"firefox"
 	"noto-fonts"
+	"zathura-pdf-mupdf"
+
 	# packages needed for neovim
 	"nodejs"
 	"npm"
 	"python-pip"
 )
+LAPTOP_PACKAGES=(
+	# laptop specific
+	"iio-sensor-proxy"
+	"onboard"
+	"acpi"
+	"tlp"
+)
 AUR_PACKAGES=(
+	"i3-gaps-rounded-git"
 	"pistol-git"
 	"ttf-hack"
+	"nerd-fonts-hack"
+)
 
-sudo sh -c "
-pacman-mirrors -f
-pacman -Syu
-pacman -S ${PACKAGES[@]}
-pacman -S --needed git base-devel
-"
+LAPTOP_AUR_PACKAGES=(
+	# laptop specific
+	"i3-battery-popup-git"
+	"screenrotator-git"
+	"touchegg"
+	"detect-tablet-mode-git"
+)
+LAPTOP=0
 
-python3 -m pip install --user --upgrade pynvim
+prompt_laptop () {
+	echo "Run script for :"
+	echo "\t1) desktop"
+	echo "\t2) laptop"
+	read LAPTOP
+}
 
-# installing oh-my-zsh
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+install_packages () {
+	TMP="${PACKAGES[@]}"
+	if [ $LAPTOP == 2 ]; then
+		TMP="$TMP ${LAPTOP_PACKAGES[@]}"
+	fi
+	sudo bash -c "
+	pacman-mirrors --continent
+	pacman -Syu
+	pacman -S $TMP
+	pacman -S --needed git base-devel
+	"
+	# installing yay
+	git clone https://aur.archlinux.org/yay.git ~/yay && cd ~/yay && makepkg -si
 
-# installing yay
-git clone https://aur.archlinux.org/yay.git ~/yay && cd ~/yay && makepkg -si
+	TMP="${AUR_PACKAGES[@]}"
+	if [ $LAPTOP == 2 ]; then
+		TMP="$TMP ${LAPTOP_AUR_PACKAGES[@]}"
+	fi
+	yay -Sy $TMP
 
-yay -Sy pistol-git
+	python3 -m pip install --user --upgrade pynvim
+}
+
+configure_zsh () {
+	# installing oh-my-zsh
+	sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+	# install spaceship prompt
+	git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" --depth=1
+	ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+}
+
+move_config_files () {
+
+	# moving config folders
+	BASEDIR=$(dirname "$0")
+	if [[ $BASEDIR == "." ]]; then
+		BASEDIR=$(pwd)
+	fi
+	FOLDERS=(
+		"i3"
+		"polybar"
+		"dunst"
+		"nvim"
+		"kitty"
+		"lf"
+		"picom"
+		"pistol"
+		"redshift"
+		"rofi"
+		"zathura"
+	)
+	for f in "${FOLDERS[@]}"
+	do
+		rm -rf $HOME/.config/$f
+		ln -s $HOME/dotfiles/$f $HOME/.config/$f
+	done
+
+	rm -f ~/.zshrc ; ln -s ~/dotfiles/.zshrc ~/.zshrc
+	rm -f ~/.zsh_aliases ; ln -s ~/dotfiles/.zsh_aliases ~/.zsh_aliases
+}
+
+main () {
+	install_packages
+	configure_zsh
+	move_config_files
+}
+
+main

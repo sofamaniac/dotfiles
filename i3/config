@@ -38,17 +38,11 @@ exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
 # kde connect system tray
 exec --no-startup-id kdeconnect-indicator
 
-# laptop specific programs
-# notification for low battery
-exec --no-startup-id i3-battery-popup -n
-# 2 in 1 pc handling
-exec --no-startup-id watch_tablet
-exec --no-startup-id screenrotator
-exec --no-startup-id touchegg
-exec --no-startup-id onboard
+# laptop specific configuration
+include laptop.config
 
 # Menu
-bindsym $mod+d exec ~/.config/rofi/bin/launcher_colorful
+bindsym $mod+d exec ~/.config/rofi/launchers/type-2/launcher.sh
 
 bindsym $mod+Shift+x exec ~/auto_clicker.sh
 
@@ -84,10 +78,10 @@ bindsym $mod+g exec firefox
 bindsym $mod+Shift+q kill
 
 # screenshot
-bindsym $mod+Shift+p exec maim -u ~/$(date +%s).png
+bindsym $mod+Shift+p exec spectacle
 
 # change background
-bindsym $mod+t exec ~/.config/i3/bg_setter.sh
+bindsym $mod+t exec ~/.config/i3/bg_setter/bg_setter.sh 0
 
 # change focus
 bindsym $mod+j focus down

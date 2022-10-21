@@ -1,6 +1,8 @@
 " turn on hybrid numbers
 :set number relativenumber
 
+set undofile
+
 :set tabstop=4
 :set noexpandtab
 :set shiftwidth=4
@@ -143,6 +145,9 @@ nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+" ctags support
+Plug 'ludovicchabant/vim-gutentags'
 
 call plug#end()
 

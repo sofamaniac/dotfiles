@@ -1,17 +1,5 @@
 #!/bin/bash
 
-
-# PICTURE=/tmp/i3lock.png
-# PICTURE=~/lock.png
-# SCREENSHOT="scrot $PICTURE"
-
-# BLUR="16x8"
-
-# $SCREENSHOT
-# convert $PICTURE -blur $BLUR $PICTURE
-# i3lock -i $PICTURE
-# rm $PICTURE
-
 ICON=$HOME/lock_icon.png
 TMPBG=/tmp/screen.png
 scrot $TMPBG
