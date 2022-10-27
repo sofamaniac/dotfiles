@@ -24,6 +24,9 @@ PACKAGES=(
 	"firefox"
 	"noto-fonts"
 	"zathura-pdf-mupdf"
+	"pavucontrol"
+	"arandr"
+	"unclutter"
 
 	# packages needed for neovim
 	"nodejs"

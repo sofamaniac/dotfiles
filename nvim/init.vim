@@ -149,6 +149,9 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 " ctags support
 Plug 'ludovicchabant/vim-gutentags'
 
+" support for glsl
+Plug 'tikhomirov/vim-glsl'
+
 call plug#end()
 
 let g:PaperColor_Theme_Options={

@@ -37,6 +37,8 @@ exec --no-startup-id dunst -config ~/.config/dunst/dunstrc
 exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
 # kde connect system tray
 exec --no-startup-id kdeconnect-indicator
+# hide mouse cursor when not needed
+exec --no-startup-id unclutter &
 
 # laptop specific configuration
 include laptop.config
