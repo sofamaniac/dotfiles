@@ -29,7 +29,7 @@ nnoremap <expr> k v:count ? 'k' : 'gk'
 nnoremap H gT
 nnoremap L gt
 
-let g:mapleader = "\<Space>"
+" let g:mapleader = "<Space>"
 nnoremap <Space><Space> :nohlsearch<CR>
 
 " remap double esc in terminal mode to exit back to normal mode
@@ -50,6 +50,7 @@ command -nargs=0 Shortcuts :vsplit ~/Nextcloud/vim_shortcuts.txt
 syntax on
 
 
+" auto install vim-plug
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
   silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
@@ -57,6 +58,9 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
 endif
 " Gestion des plugins
 call plug#begin('~/.vim/plugged')
+
+" catppuccin
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 
 " Latex configuration
 Plug 'lervag/vimtex'
@@ -152,21 +156,13 @@ Plug 'ludovicchabant/vim-gutentags'
 " support for glsl
 Plug 'tikhomirov/vim-glsl'
 
+" buffer navigator
+Plug 'jeetsukumaran/vim-buffergator'
+
 call plug#end()
 
-let g:PaperColor_Theme_Options={
-            \ 'theme': {
-                \ 'default': {
-                    \ 'transparent_background': 1,
-                    \ 'override' : {
-                        \ 'color05': ['#2F7A47', '']
-                    \}
-                \},
-            \}
-        \}
-let g:ariline_theme='papercolor'
-let g:lightline = { 'colorscheme': 'PaperColor' }
-colorscheme PaperColor
+colorscheme catppuccin-macchiato
+let g:lightline = { 'colorscheme': 'catppuccin' }
 
 let TEXPREAMBLE="~/cours/preamble.tex"
 " Templates handling

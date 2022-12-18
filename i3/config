@@ -27,7 +27,7 @@ border_radius 10
 exec_always --no-startup-id playerctld daemon
 exec_always --no-startup-id ~/.config/i3/bg_setter.sh
 exec --no-startup-id xsettingsd &
-exec --no-startup-id picom --experimental-backends -b
+exec --no-startup-id picom -b
 exec --no-startup-id nextcloud
 exec --no-startup-id redshift
 exec --no-startup-id nm-applet
@@ -39,14 +39,18 @@ exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
 exec --no-startup-id kdeconnect-indicator
 # hide mouse cursor when not needed
 exec --no-startup-id unclutter &
+# display cava behind all windows
+exec_always --no-startup-id killall cava; ~/bin/i3bgwin urxvt -depth 32 -bg '[00]black' --color6 '[50]cyan' +sb -embed {windowid} -e cava &
+#exec_always --no-startup-id killall cava; xwinwrap -g 1900x300+10+780 -ni -argb -b -nf -o 0.5 -fdt -ov -- urxvt -depth 32 -bg '[00]black' --color6 '[50]cyan' +sb -embed %WID -e cava
+#exec_always --no-startup-id autotiling
 
 # laptop specific configuration
 include laptop.config
 
 # Menu
-bindsym $mod+d exec ~/.config/rofi/launchers/type-2/launcher.sh
+bindsym $mod+d exec rofi -show drun
 
-bindsym $mod+Shift+x exec ~/auto_clicker.sh
+bindsym $mod+Shift+x exec ~/dotfiles/autoclicker.sh
 
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -189,7 +193,7 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+#bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {

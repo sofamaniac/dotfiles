@@ -24,9 +24,8 @@ function pdf(){
 }
 
 function mktex(){
-	mkdir $1
+	cp -r ~/Nextcloud/cours/latex_template $1
 	cd $1
-	cp ~/Nextcloud/cours/preamble.tex .
 	vim main.tex
 }
 

@@ -45,6 +45,7 @@ AUR_PACKAGES=(
 	"pistol-git"
 	"ttf-hack"
 	"nerd-fonts-hack"
+	"cava"
 )
 
 LAPTOP_AUR_PACKAGES=(
@@ -84,6 +85,14 @@ install_packages () {
 	yay -Sy $TMP
 
 	python3 -m pip install --user --upgrade pynvim
+
+	# installing i3bgwin which allows to display windows behind all other windows
+	git clone https://github.com/quantum5/i3bgwin.git ~/Downloads/i3bgwin
+	cd ~/Downloads/i3bgwin
+	make
+	mkdir ~/bin
+	mv i3bgwin ~/bin
+	cd ~
 }
 
 configure_zsh () {
