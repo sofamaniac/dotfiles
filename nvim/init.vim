@@ -1,11 +1,38 @@
+" Setting options and shortcuts for buffer
+set hidden
+
+" We remap (/) to [/] to make shortcuts easier
+nmap ( [
+nmap ) ]
+
+nnoremap <silent> [b :bprevious<CR>
+nnoremap <silent> ]b :bnext<CR>
+nnoremap <silent> [B :bfirst<CR>
+nnoremap <silent> ]B :blast<CR>
+
+" Found on Reddit
+" " Copy to clipboard
+vnoremap  <leader>y  "+y
+nnoremap  <leader>Y  "+yg_
+nnoremap  <leader>y  "+y
+nnoremap  <leader>yy  "+yy
+
+" " Paste from clipboard
+nnoremap <leader>p "+p
+nnoremap <leader>P "+P
+vnoremap <leader>p "+p
+vnoremap <leader>P "+P
 " turn on hybrid numbers
-:set number relativenumber
+set number relativenumber
 
 set undofile
 
-:set tabstop=4
-:set noexpandtab
-:set shiftwidth=4
+filetype on
+filetype plugin on
+
+set tabstop=4
+set noexpandtab
+set shiftwidth=4
 
 " add mouse support
 set mouse=a
@@ -24,10 +51,6 @@ set omnifunc=syntaxcomplete#Complete
 
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
-
-" shortcuts for tab navigation
-nnoremap H gT
-nnoremap L gt
 
 " let g:mapleader = "<Space>"
 nnoremap <Space><Space> :nohlsearch<CR>
@@ -49,15 +72,20 @@ command -nargs=0 Shortcuts :vsplit ~/Nextcloud/vim_shortcuts.txt
 " Syntax coloration
 syntax on
 
-
 " auto install vim-plug
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
   silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
-" Gestion des plugins
+
+" ======================= "
+" PLUGIN CONFIG AND SETUP
+" ======================= "
 call plug#begin('~/.vim/plugged')
+
+" vim-fugitive for git integration
+Plug 'tpope/vim-fugitive'
 
 " catppuccin
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
@@ -121,7 +149,6 @@ nmap <leader>rn <Plug>(coc-rename)
 " vimwiki and necessary parameters settings
 Plug 'vimwiki/vimwiki'
 set nocompatible
-filetype plugin on
 syntax on
 let g:vimwiki_list = [{'path': '~/vimwiki/',
                       \ 'syntax': 'markdown', 'ext': '.md'}]
@@ -153,9 +180,6 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 " ctags support
 Plug 'ludovicchabant/vim-gutentags'
 
-" support for glsl
-Plug 'tikhomirov/vim-glsl'
-
 " buffer navigator
 Plug 'jeetsukumaran/vim-buffergator'
 
@@ -163,47 +187,6 @@ call plug#end()
 
 colorscheme catppuccin-macchiato
 let g:lightline = { 'colorscheme': 'catppuccin' }
-
-let TEXPREAMBLE="~/cours/preamble.tex"
-" Templates handling
-augroup templates
-	au!
-	" read in template file if it exists
-	autocmd BufNewFile *.* silent! execute '0r $HOME/.vim/templates/skeleton.'.expand("<afile>:e")
-
-	" automagically set things up in template
-	autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
-augroup END
-
-" Treesitter configuration
-lua << EOF
-require('config')
-EOF
-
-" Setting options and shortcuts for buffer
-set hidden
-
-" We remap (/) to [/] to make shortcuts easier
-nmap ( [
-nmap ) ]
-
-nnoremap <silent> [b :bprevious<CR>
-nnoremap <silent> ]b :bnext<CR>
-nnoremap <silent> [B :bfirst<CR>
-nnoremap <silent> ]B :blast<CR>
-
-" Found on Reddit
-" " Copy to clipboard
-vnoremap  <leader>y  "+y
-nnoremap  <leader>Y  "+yg_
-nnoremap  <leader>y  "+y
-nnoremap  <leader>yy  "+yy
-
-" " Paste from clipboard
-nnoremap <leader>p "+p
-nnoremap <leader>P "+P
-vnoremap <leader>p "+p
-vnoremap <leader>P "+P
 
 " Setting transparent background
 hi Normal guibg=NONE ctermbg=NONE
@@ -234,3 +217,8 @@ fun! UrlNoSpell()
 	syn cluster Spell add=UrlNoSpell
 endfun
 autocmd BufRead,BufNewFile * :call UrlNoSpell()
+
+" Treesitter configuration
+lua << EOF
+require('config')
+EOF
