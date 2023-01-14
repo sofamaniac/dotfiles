@@ -40,7 +40,7 @@ exec --no-startup-id kdeconnect-indicator
 # hide mouse cursor when not needed
 exec --no-startup-id unclutter &
 # display cava behind all windows
-exec_always --no-startup-id killall cava; ~/bin/i3bgwin urxvt -depth 32 -bg '[00]black' --color6 '[50]cyan' +sb -embed {windowid} -e cava &
+#exec_always --no-startup-id killall cava; ~/bin/i3bgwin urxvt -depth 32 -bg '[00]black' --color6 '[50]cyan' +sb -embed {windowid} -e cava &
 #exec_always --no-startup-id killall cava; xwinwrap -g 1900x300+10+780 -ni -argb -b -nf -o 0.5 -fdt -ov -- urxvt -depth 32 -bg '[00]black' --color6 '[50]cyan' +sb -embed %WID -e cava
 #exec_always --no-startup-id autotiling
 
