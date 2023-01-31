@@ -1,4 +1,7 @@
 DEFAULT_USER="sofamaniac"
+# exporting useful variables
+export ZK_NOTEBOOK_DIR=/home/sofamaniac/Nextcloud/zk
+export EDITOR=/usr/bin/nvim
 
 # bind media keys to avoid interferences with other programs
 zsh-widget-noop () {}
@@ -7,7 +10,6 @@ bindkey "^[[57428u" zsh-widget-noop
 bindkey "^[[57436u" zsh-widget-noop
 bindkey "^[[57435u" zsh-widget-noop
 
-export EDITOR=/usr/bin/vim
 export PATH=$PATH:/home/sofamaniac/bin
 # Import aliases
 . ~/.zsh_aliases

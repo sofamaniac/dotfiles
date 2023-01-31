@@ -2,11 +2,14 @@
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'ocaml', 'help', 'vim' },
+  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'ocaml', 'help', 'vim' , 'markdown', 'markdown_inline'},
 
   ignore_install = { "latex" }, -- Vimtex does not integrate well with Treesitter
 
-  highlight = { enable = true },
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = {'markdown'}
+  },
   indent = { enable = true, disable = { 'python' } },
   incremental_selection = {
     enable = true,

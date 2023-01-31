@@ -75,6 +75,9 @@ require('packer').startup(function(use)
 
   use { "folke/which-key.nvim" }
 
+  -- Zettlekasten utility
+  use("mickael-menu/zk-nvim")
+
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
   if has_plugins then
@@ -173,6 +176,11 @@ vim.g.vimwiki_list = {{
   syntax= 'markdown',
   ext = '.md'
 }}
+
+-- zk configuration
+require("zk").setup {
+  picker = "telescope"
+}
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')

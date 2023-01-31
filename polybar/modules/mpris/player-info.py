@@ -24,6 +24,7 @@ timestamp = "00:00/00:00"
 slices = [""]
 offset = 0
 last_reset = time.time()
+last_query = time.time()
 player_name = ""
 
 
@@ -86,15 +87,18 @@ def get_player_name():
         player_name = f.read().strip()
 
 
-def update_info(_title, _duration):
+def update_info(_title, _duration, reset=False):
     global title
     global slices
     global duration
     global offset
+    if title != _title:
+        reset = True
     title = _title
-    slices = create_slices(title)
-    offset = 0
     duration = _duration
+    if reset:
+        slices = create_slices(title)
+        offset = 0
 
 
 async def main():
@@ -114,11 +118,13 @@ async def main():
         get_player_name()
         if "Metadata" in changed_properties:
             title, duration = await get_info(player)
-            update_info(title, duration)
+            update_info(title, duration, reset=True)
 
     async def update_display():
         global offset
         global last_reset
+        global last_query
+        global duration
         position = await get_position(player)
         _print(f"({position}/{duration}) {slices[offset]}")
         t = time.time()
@@ -127,6 +133,11 @@ async def main():
         if offset >= len(slices):
             offset = 0
             last_reset = t
+        if t - last_query > INTERVAL_QUERY:
+            get_player_name()
+            _title, _duration = await get_info(player)
+            update_info(_title, _duration)
+            last_query = t
 
     async def loop():
         while True:
