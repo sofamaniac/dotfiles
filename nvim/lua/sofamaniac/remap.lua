@@ -29,7 +29,7 @@ vnoremap <leader>p "+p
 vnoremap <leader>P "+P ]]
 
 -- NERDTree
-vim.keymap.set('n', '<leader>E', ':NERDTreeToggle<CR>', { desc = "Toggle NERDTree" })
+vim.keymap.set('n', '<leader>x', ':NERDTreeToggle<CR>', { desc = "Toggle NERDTree" })
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
@@ -54,3 +54,9 @@ vim.keymap.set('n', '(d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ')d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+
+-- Zettelkasten maps
+vim.keymap.set('n', '<leader>sz', ":ZkNotes<CR>", { desc = '[S]earch [Z]ettelkasten' })
+
+-- LuaSnips keymaps
+vim.keymap.set('n', '<leader>sr', "<cmd> source ~/.config/nvim/after/plugin/luasnip.lua<CR>", { desc = "[S]nippets [R]eload" })

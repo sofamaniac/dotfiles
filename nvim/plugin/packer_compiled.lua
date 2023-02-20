@@ -184,11 +184,6 @@ _G.packer_plugins = {
     path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/telescope.nvim",
     url = "https://github.com/nvim-telescope/telescope.nvim"
   },
-  ultisnips = {
-    loaded = true,
-    path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/ultisnips",
-    url = "https://github.com/sirver/ultisnips"
-  },
   ["vim-buffergator"] = {
     loaded = true,
     path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/vim-buffergator",

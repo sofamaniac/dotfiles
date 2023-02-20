@@ -66,7 +66,10 @@ def create_slices(title):
 async def get_info(player):
     metadata = await player.get_metadata()
     title = metadata["xesam:title"].value
-    duration = int(metadata["mpris:duration"].value // 1e6)
+    try:
+        duration = int(metadata["mpris:duration"].value // 1e6)
+    except KeyError:
+        duration = 0
     dur_m, dur_s = divmod(duration, 60)
     dur_h, dur_m = divmod(dur_m, 60)
     hour_str = f"{dur_h:02d}:" if dur_h > 0 else ""

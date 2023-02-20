@@ -93,7 +93,7 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
-require('lspconfig').ltex.setup {
+--[[ require('lspconfig').ltex.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
@@ -101,4 +101,4 @@ require('lspconfig').ltex.setup {
       checkFrequency = "save",
     }
   }
-}
+} ]]
