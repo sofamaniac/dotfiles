@@ -67,9 +67,10 @@ async def get_info(player):
     metadata = await player.get_metadata()
     title = metadata["xesam:title"].value
     try:
-        duration = int(metadata["mpris:duration"].value // 1e6)
+        duration = int(metadata["mpris:length"].value // 1e6)
     except KeyError:
         duration = 0
+        return title, ""
     dur_m, dur_s = divmod(duration, 60)
     dur_h, dur_m = divmod(dur_m, 60)
     hour_str = f"{dur_h:02d}:" if dur_h > 0 else ""
@@ -129,7 +130,10 @@ async def main():
         global last_query
         global duration
         position = await get_position(player)
-        _print(f"({position}/{duration}) {slices[offset]}")
+        if duration:
+            _print(f"({position}/{duration}) {slices[offset]}")
+        else:
+            _print(f"{slices[offset]}")
         t = time.time()
         if t - last_reset > INTERVAL_ANIMATION:
             offset += 1

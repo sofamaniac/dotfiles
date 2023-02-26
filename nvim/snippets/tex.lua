@@ -87,6 +87,7 @@ local snips = {
 
   create_sec_fmt("sec", "section", "section", "sec"),
   create_sec_fmt("sub", "subsection", "subsection", "sub"),
+  create_sec_fmt("ssub", "subsubsection", "subsubsection", "ssub"),
 
 
 

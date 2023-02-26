@@ -41,6 +41,22 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
+
+  -- Display message when hovering
+  vim.api.nvim_create_autocmd("CursorHold", {
+    buffer = bufnr,
+    callback = function()
+      local opts = {
+        focusable = false,
+        close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+        border = 'rounded',
+        source = 'always',
+        prefix = ' ',
+        scope = 'cursor',
+      }
+      vim.diagnostic.open_float(nil, opts)
+    end
+  })
 end
 
 -- Turn on lsp status information
@@ -73,6 +89,11 @@ require('neodev').setup()
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
+-- disable virtual text
+vim.diagnostic.config({
+  virtual_text = false,
+})
+
 -- Setup mason so it can manage external tooling
 require('mason').setup()
 
@@ -93,7 +114,7 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
---[[ require('lspconfig').ltex.setup {
+require('lspconfig').ltex.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
@@ -101,4 +122,4 @@ mason_lspconfig.setup_handlers {
       checkFrequency = "save",
     }
   }
-} ]]
+}
