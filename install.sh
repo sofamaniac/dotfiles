@@ -138,6 +138,10 @@ main () {
 	install_packages
 	configure_zsh
 	move_config_files
+
+	echo "Remember to move userChrome.css to appropriate foler"
+	echo "and to enable toolkit.legacyUserProfileCustomizations.stylesheets"
+	echo "in about:config"
 }
 
 main
