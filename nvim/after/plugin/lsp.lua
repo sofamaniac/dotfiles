@@ -74,7 +74,7 @@ local servers = {
   -- rust_analyzer = {},
   -- tsserver = {},
 
-  sumneko_lua = {
+  lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
@@ -122,4 +122,9 @@ require('lspconfig').ltex.setup {
       checkFrequency = "save",
     }
   }
+}
+
+require('lspconfig').rust_analyzer.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
 }
