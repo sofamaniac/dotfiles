@@ -127,4 +127,18 @@ require('lspconfig').ltex.setup {
 require('lspconfig').rust_analyzer.setup {
   on_attach = on_attach,
   capabilities = capabilities,
+  settings = {
+        ['rust-analyzer'] = {
+      checkOnSave = {
+        allFeatures = true,
+        overrideCommand = {
+          'cargo', 'clippy', '--workspace', '--message-format=json',
+          '--all-targets', '--all-features'
+        }
+      }
+    }
+  }
 }
+
+-- auto format on save
+vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]

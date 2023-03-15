@@ -29,7 +29,7 @@ require('packer').startup(function(use)
 
   use { -- Autocompletion
     'hrsh7th/nvim-cmp',
-    requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
+    requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-omni' },
   }
 
   use { -- Highlight, edit, and navigate code
@@ -49,11 +49,11 @@ require('packer').startup(function(use)
   use 'tpope/vim-rhubarb'
   use 'lewis6991/gitsigns.nvim'
 
-  use {'catppuccin/nvim', as = 'catppuccin' } -- Catppuccin theme
-  use 'nvim-lualine/lualine.nvim' -- Fancier statusline
-  use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
-  use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
-  use 'tpope/vim-sleuth' -- Detect tabstop and shiftwidth automatically
+  use { 'catppuccin/nvim', as = 'catppuccin' } -- Catppuccin theme
+  use 'nvim-lualine/lualine.nvim'             -- Fancier statusline
+  use 'lukas-reineke/indent-blankline.nvim'   -- Add indentation guides even on blank lines
+  use 'numToStr/Comment.nvim'                 -- "gc" to comment visual regions/lines
+  use 'tpope/vim-sleuth'                      -- Detect tabstop and shiftwidth automatically
 
   -- Fuzzy Finder (files, lsp, etc)
   use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
@@ -129,9 +129,9 @@ require('lualine').setup {
 vim.o.timeout = true
 vim.o.timeoutlen = 300
 require("which-key").setup {
--- your configuration comes here
--- or leave it empty to use the default settings
--- refer to the configuration section below
+  -- your configuration comes here
+  -- or leave it empty to use the default settings
+  -- refer to the configuration section below
 }
 
 -- Enable Comment.nvim
@@ -162,19 +162,19 @@ require('telescope').setup {
   defaults = {
     mappings = {
       i = {
-        ['<C-u>'] = false,
-        ['<C-d>'] = false,
+            ['<C-u>'] = false,
+            ['<C-d>'] = false,
       },
     },
   },
 }
 
 -- vimwiki configuration
-vim.g.vimwiki_list = {{
-  path= '~/vimwiki/',
-  syntax= 'markdown',
+vim.g.vimwiki_list = { {
+  path = '~/vimwiki/',
+  syntax = 'markdown',
   ext = '.md'
-}}
+} }
 
 -- zk configuration
 require("zk").setup {

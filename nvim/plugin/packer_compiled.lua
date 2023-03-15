@@ -94,6 +94,11 @@ _G.packer_plugins = {
     path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
     url = "https://github.com/hrsh7th/cmp-nvim-lsp"
   },
+  ["cmp-omni"] = {
+    loaded = true,
+    path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/cmp-omni",
+    url = "https://github.com/hrsh7th/cmp-omni"
+  },
   cmp_luasnip = {
     loaded = true,
     path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
