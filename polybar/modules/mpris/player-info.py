@@ -37,6 +37,13 @@ def _print(string, *args):
     sys.stdout.flush()
 
 
+def length(string):
+    s = 0
+    for i in string:
+        s += char_size(i)
+    return s
+
+
 def create_string_of_length(string, length, start=0):
     i = start
     l = 0
@@ -52,7 +59,7 @@ def create_string_of_length(string, length, start=0):
 def create_slices(title):
     result = []
     offset = 0
-    if len(title) < LENGTH:
+    if length(title) < LENGTH:
         return [title]
     end = 0
     title2 = title + (LENGTH//2)*' ' + title
