@@ -99,9 +99,8 @@ configure_zsh () {
 	# installing oh-my-zsh
 	sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-	# install spaceship prompt
-	git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" --depth=1
-	ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+	yay -S --noconfirm zsh-theme-powerlevel10k-git
+	echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 }
 
 move_config_files () {
@@ -136,8 +135,8 @@ move_config_files () {
 
 main () {
 	install_packages
-	configure_zsh
 	move_config_files
+	configure_zsh
 
 	echo "Remember to move userChrome.css to appropriate foler"
 	echo "and to enable toolkit.legacyUserProfileCustomizations.stylesheets"
