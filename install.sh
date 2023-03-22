@@ -27,6 +27,10 @@ PACKAGES=(
 	"pavucontrol"
 	"arandr"
 	"unclutter"
+	"kdeconnect"
+	"texlive-most"
+	"ocaml"
+	"opam"
 
 	# packages needed for neovim
 	"nodejs"
@@ -45,15 +49,11 @@ AUR_PACKAGES=(
 	"pistol-git"
 	"ttf-hack"
 	"nerd-fonts-hack"
-	"cava"
 )
 
 LAPTOP_AUR_PACKAGES=(
 	# laptop specific
 	"i3-battery-popup-git"
-	"screenrotator-git"
-	"touchegg"
-	"detect-tablet-mode-git"
 )
 LAPTOP=0
 
