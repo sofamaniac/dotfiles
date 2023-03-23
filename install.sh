@@ -23,6 +23,9 @@ PACKAGES=(
 	"aerc"
 	"firefox"
 	"noto-fonts"
+	"noto-fonts-emoji"
+	"noto-fonts-extra"
+	"noto-fonts-cjk"
 	"zathura-pdf-mupdf"
 	"pavucontrol"
 	"arandr"
@@ -31,6 +34,7 @@ PACKAGES=(
 	"texlive-most"
 	"ocaml"
 	"opam"
+	"spotify-launcher"
 
 	# packages needed for neovim
 	"nodejs"
@@ -131,6 +135,7 @@ move_config_files () {
 
 	rm -f ~/.zshrc ; ln -s ~/dotfiles/.zshrc ~/.zshrc
 	rm -f ~/.zsh_aliases ; ln -s ~/dotfiles/.zsh_aliases ~/.zsh_aliases
+	rm -f ~/.config/picom.config
 }
 
 main () {
