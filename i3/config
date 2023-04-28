@@ -27,12 +27,12 @@ border_radius 10
 exec_always --no-startup-id playerctld daemon
 exec_always --no-startup-id ~/.config/i3/bg_setter.sh
 exec --no-startup-id xsettingsd &
-exec --no-startup-id picom -b --config ~/.config/picom/picom.conf
+exec_always --no-startup-id picom -b --config ~/.config/picom/picom.conf
 #exec --no-startup-id nextcloud
 exec --no-startup-id redshift
 exec --no-startup-id nm-applet
 exec --no-startup-id dunst -config ~/.config/dunst/dunstrc
-exec_always --no-startup-id xkbcomp -w 0 ~/dotfiles/xkbmap $DISPLAY
+exec_always --no-startup-id xkbcomp -w 0 ~/dotfiles/xkbmap_qwerty $DISPLAY
 #exec "setxkbmap -layout fr,fr bepo"
 #exec "setxkbmap -option 'grp:alt_shift_toggle'"
 exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh

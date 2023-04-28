@@ -126,7 +126,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # opam configuration
-test -r /home/sofamaniac/.opam/opam-init/init.zsh && . /home/sofamaniac/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+[[ ! -r /home/sofamaniac/.opam/opam-init/init.zsh ]] || source /home/sofamaniac/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -150,3 +150,4 @@ source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+export PATH=$PATH:/home/sofamaniac/.spicetify

@@ -8,6 +8,7 @@ vim.g.maplocalleader = ' '
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
@@ -15,8 +16,8 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 
 -- Yank to and from clipboard
 -- Found on Reddit
-vim.keymap.set({'n', 'v'}, '<leader>y', '"+y', { desc = "Copy to clipboard" })
-vim.keymap.set({'n', 'v'}, '<leader>p', '"+p', { desc = "Paste from clipboard" })
+vim.keymap.set({ 'n', 'v' }, '<leader>y', '"+y', { desc = "Copy to clipboard" })
+vim.keymap.set({ 'n', 'v' }, '<leader>p', '"+p', { desc = "Paste from clipboard" })
 --[[ vnoremap  <leader>y  "+y
 nnoremap  <leader>Y  "+yg_
 nnoremap  <leader>y  "+y
@@ -27,7 +28,6 @@ nnoremap <leader>p "+p
 nnoremap <leader>P "+P
 vnoremap <leader>p "+p
 vnoremap <leader>P "+P ]]
-
 -- NERDTree
 vim.keymap.set('n', '<leader>x', ':NERDTreeToggle<CR>', { desc = "Toggle NERDTree" })
 
@@ -50,13 +50,20 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 vim.keymap.set('n', '<leader>sk', require('telescope.builtin').keymaps, { desc = '[S]earch [K]eymaps' })
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '(d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ')d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+vim.keymap.set('n', '(d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic' })
+vim.keymap.set('n', ')d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
+vim.keymap.set('n', '<leader>de', vim.diagnostic.open_float, { desc = 'Open diagnostics in floating window' })
+vim.keymap.set('n', '<leader>dq', vim.diagnostic.setloclist, { desc = 'Show location list' })
+vim.keymap.set('n', '<leader>dt', vim.lsp.buf.hover, { desc = 'Show info on symbol under cursor' })
 
 -- Zettelkasten maps
 vim.keymap.set('n', '<leader>sz', ":ZkNotes<CR>", { desc = '[S]earch [Z]ettelkasten' })
 
 -- LuaSnips keymaps
-vim.keymap.set('n', '<leader>sr', "<cmd> source ~/.config/nvim/after/plugin/luasnip.lua<CR>", { desc = "[S]nippets [R]eload" })
+vim.keymap.set('n', '<leader>sr', "<cmd> source ~/.config/nvim/after/plugin/luasnip.lua<CR>",
+  { desc = "[S]nippets [R]eload" })
+
+-- Window navigation maps
+vim.keymap.set('n', '<leader>v', '<C-w>', { desc = '<C-w>' })
+vim.keymap.set('n', '<leader>vv', ':vsplit<CR>', { desc = 'Vertical split' })
+vim.keymap.set('n', '<leader>tt', ':terminal<CR>', { desc = 'Open terminal' })

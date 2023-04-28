@@ -120,6 +120,7 @@ require('lspconfig').ltex.setup {
   settings = {
     ltex = {
       checkFrequency = "save",
+      language = "fr",
     }
   }
 }
@@ -128,7 +129,7 @@ require('lspconfig').rust_analyzer.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
-        ['rust-analyzer'] = {
+    ['rust-analyzer'] = {
       checkOnSave = {
         allFeatures = true,
         overrideCommand = {
@@ -140,5 +141,14 @@ require('lspconfig').rust_analyzer.setup {
   }
 }
 
+require 'lspconfig'.ocamllsp.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  cmd = { "ocamllsp" },
+  filetypes = { "ocaml", "ocaml.menhir", "ocaml.interface", "ocaml.ocamllex", "reason", "dune" },
+  root_dir = require('lspconfig').util.root_pattern("*.opam", "esy.json", "package.json", ".git", "dune-project",
+    "dune-workspace"),
+}
+
 -- auto format on save
-vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
+vim.cmd [[autocmd BufWritePre <buffer> :Format]]

@@ -209,10 +209,10 @@ _G.packer_plugins = {
     path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/vim-rhubarb",
     url = "https://github.com/tpope/vim-rhubarb"
   },
-  ["vim-sleuth"] = {
+  ["vim-surround"] = {
     loaded = true,
-    path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/vim-sleuth",
-    url = "https://github.com/tpope/vim-sleuth"
+    path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/vim-surround",
+    url = "https://github.com/tpope/vim-surround"
   },
   vimtex = {
     loaded = true,

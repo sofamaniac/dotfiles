@@ -47,13 +47,13 @@ require('packer').startup(function(use)
   -- Git related plugins
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
+  use 'tpope/vim-surround'
   use 'lewis6991/gitsigns.nvim'
 
   use { 'catppuccin/nvim', as = 'catppuccin' } -- Catppuccin theme
-  use 'nvim-lualine/lualine.nvim'             -- Fancier statusline
-  use 'lukas-reineke/indent-blankline.nvim'   -- Add indentation guides even on blank lines
-  use 'numToStr/Comment.nvim'                 -- "gc" to comment visual regions/lines
-  use 'tpope/vim-sleuth'                      -- Detect tabstop and shiftwidth automatically
+  use 'nvim-lualine/lualine.nvim'              -- Fancier statusline
+  use 'lukas-reineke/indent-blankline.nvim'    -- Add indentation guides even on blank lines
+  use 'numToStr/Comment.nvim'                  -- "gc" to comment visual regions/lines
 
   -- Fuzzy Finder (files, lsp, etc)
   use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
@@ -162,8 +162,8 @@ require('telescope').setup {
   defaults = {
     mappings = {
       i = {
-            ['<C-u>'] = false,
-            ['<C-d>'] = false,
+        ['<C-u>'] = false,
+        ['<C-d>'] = false,
       },
     },
   },
@@ -188,6 +188,40 @@ require("luasnip").setup {
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
+
+vim.cmd([[
+
+" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
+let s:opam_share_dir = system("opam var share")
+let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+
+let s:opam_configuration = {}
+
+function! OpamConfOcpIndent()
+  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+endfunction
+let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+
+function! OpamConfOcpIndex()
+  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+endfunction
+let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+
+function! OpamConfMerlin()
+  let l:dir = s:opam_share_dir . "/merlin/vim"
+  execute "set rtp+=" . l:dir
+endfunction
+let s:opam_configuration['merlin'] = function('OpamConfMerlin')
+
+let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+for tool in s:opam_packages
+  " Respect package order (merlin should be after ocp-index)
+  call s:opam_configuration[tool]()
+endfor
+" ## end of OPAM user-setup addition for vim / base ## keep this line
+" ## added by OPAM user-setup for vim / ocp-indent ## cf30d8a272d8da84864a0b60c1677ac4 ## you can edit, but keep this line
+" ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line
+ ]])
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
