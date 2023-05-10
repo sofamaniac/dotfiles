@@ -40,15 +40,20 @@ vim.o.completeopt = 'menuone,noselect'
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
-  callback = function()
-    vim.highlight.on_yank()
-  end,
-  group = highlight_group,
-  pattern = '*',
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+	group = highlight_group,
+	pattern = '*',
 })
 
 vim.diagnostic.config({
-  virtual_text = {
-    source = true
-  }
+	virtual_text = {
+		source = true
+	}
 })
+
+-- Merlin options
+if vim.fn.exists("g:merlin_split_method") then
+	vim.cmd [[let g:merlin_split_method = 'vertical']]
+end

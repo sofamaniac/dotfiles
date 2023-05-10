@@ -1,0 +1,13 @@
+playerctld daemon
+xkbcomp -w 0 ~/dotfiles/xkbmap $DISPLAY
+~/.config/i3/bg_setter.sh
+xsettingsd
+~/.config/polybar/launch_polybar.sh &
+picom -b --config ~/.config/picom/picom.conf
+nextcloud
+redshift
+nm-applet
+dunst -config ~/.config/dunst/dunstrc
+kdeconnect-indicator
+# hide mouse cursor when not needed
+unclutter &

@@ -9,6 +9,7 @@ import sys
 import subprocess
 from wcwidth import wcwidth
 from dbus_next.aio import MessageBus
+from dbus_next.errors import DBusError
 
 import asyncio
 
@@ -26,7 +27,7 @@ offset = 0
 last_reset = time.time()
 last_query = time.time()
 player_name = ""
-
+player, properties = None, None
 
 def char_size(char):
     return wcwidth(char)
@@ -73,9 +74,10 @@ def create_slices(title):
 async def get_info(player):
     metadata = await player.get_metadata()
     title = metadata["xesam:title"].value
+    title = f"{title: <{LENGTH - 1}}"
     try:
         duration = int(metadata["mpris:length"].value // 1e6)
-    except KeyError:
+    except (KeyError, DBusError):
         duration = 0
         return title, ""
     dur_m, dur_s = divmod(duration, 60)
@@ -85,17 +87,28 @@ async def get_info(player):
 
 
 async def get_position(player):
-    position = await player.get_position() // 1e6  # convert to second
-    pos_m, pos_s = divmod(int(position), 60)
-    pos_h, pos_m = divmod(int(pos_m), 60)
-    hour_str = f"{pos_h:02d}:" if pos_h > 0 else ""
-    return f"{hour_str}{pos_m:02d}:{pos_s:02d}"
+    try:
+        position = await player.get_position() // 1e6  # convert to second
+        pos_m, pos_s = divmod(int(position), 60)
+        pos_h, pos_m = divmod(int(pos_m), 60)
+        hour_str = f"{pos_h:02d}:" if pos_h > 0 else ""
+        return f"{hour_str}{pos_m:02d}:{pos_s:02d}"
+    except (DBusError):
+        return ""
 
 
-def get_player_name():
-    global player_name
+async def get_player(bus):
     with open("/home/sofamaniac/dotfiles/polybar/modules/mpris/player", 'r') as f:
         player_name = f.read().strip()
+        # the introspection xml would normally be included in your project, but
+        # this is convenient for development
+        introspection = await bus.introspect(f'org.mpris.MediaPlayer2.{player_name}', '/org/mpris/MediaPlayer2')
+
+        obj = bus.get_proxy_object(f'org.mpris.MediaPlayer2.{player_name}', '/org/mpris/MediaPlayer2',
+                                   introspection)
+        player = obj.get_interface('org.mpris.MediaPlayer2.Player')
+        properties = obj.get_interface('org.freedesktop.DBus.Properties')
+        return player, properties
 
 
 def update_info(_title, _duration, reset=False):
@@ -113,20 +126,16 @@ def update_info(_title, _duration, reset=False):
 
 
 async def main():
+    global player, properties
     bus = await MessageBus().connect()
-    get_player_name()
-    # the introspection xml would normally be included in your project, but
-    # this is convenient for development
-    introspection = await bus.introspect(f'org.mpris.MediaPlayer2.{player_name}', '/org/mpris/MediaPlayer2')
-
-    obj = bus.get_proxy_object(f'org.mpris.MediaPlayer2.{player_name}', '/org/mpris/MediaPlayer2',
-                               introspection)
-    player = obj.get_interface('org.mpris.MediaPlayer2.Player')
-    properties = obj.get_interface('org.freedesktop.DBus.Properties')
+    player = None
+    properties = None
+    player, properties = await get_player(bus)
 
     # listen to signals
     async def on_properties_changed(interface_name, changed_properties, invalidated_properties):
-        get_player_name()
+        global player, properties
+        player, properties = await get_player(bus)
         if "Metadata" in changed_properties:
             title, duration = await get_info(player)
             update_info(title, duration, reset=True)
@@ -136,6 +145,7 @@ async def main():
         global last_reset
         global last_query
         global duration
+        global player, properties
         position = await get_position(player)
         if duration:
             _print(f"({position}/{duration}) {slices[offset]}")
@@ -148,7 +158,7 @@ async def main():
             offset = 0
             last_reset = t
         if t - last_query > INTERVAL_QUERY:
-            get_player_name()
+            player, properties = await get_player(bus)
             _title, _duration = await get_info(player)
             update_info(_title, _duration)
             last_query = t

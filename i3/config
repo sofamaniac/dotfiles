@@ -23,30 +23,10 @@ gaps outer 5
 gaps inner 5
 border_radius 10
 
-# autostart
-exec_always --no-startup-id playerctld daemon
-exec_always --no-startup-id ~/.config/i3/bg_setter.sh
-exec --no-startup-id xsettingsd &
-exec_always --no-startup-id picom -b --config ~/.config/picom/picom.conf
-#exec --no-startup-id nextcloud
-exec --no-startup-id redshift
-exec --no-startup-id nm-applet
-exec --no-startup-id dunst -config ~/.config/dunst/dunstrc
-exec_always --no-startup-id xkbcomp -w 0 ~/dotfiles/xkbmap_qwerty $DISPLAY
-#exec "setxkbmap -layout fr,fr bepo"
-#exec "setxkbmap -option 'grp:alt_shift_toggle'"
-exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
-# kde connect system tray
-exec --no-startup-id kdeconnect-indicator
-# hide mouse cursor when not needed
-exec --no-startup-id unclutter &
-# display cava behind all windows
-#exec_always --no-startup-id killall cava; ~/bin/i3bgwin urxvt -depth 32 -bg '[00]black' --color6 '[50]cyan' +sb -embed {windowid} -e cava &
-#exec_always --no-startup-id killall cava; xwinwrap -g 1900x300+10+780 -ni -argb -b -nf -o 0.5 -fdt -ov -- urxvt -depth 32 -bg '[00]black' --color6 '[50]cyan' +sb -embed %WID -e cava
-#exec_always --no-startup-id autotiling
+# all instructions to start specific programs have been move to the .xprofile file
 
 # laptop specific configuration
-#include laptop.config
+include laptop.config
 
 # Menu
 bindsym $mod+d exec rofi -show drun
@@ -89,6 +69,10 @@ bindsym $mod+Shift+p exec flameshot gui
 
 # change background
 bindsym $mod+t exec ~/.config/i3/bg_setter/bg_setter.sh 0
+bindsym $mod+Shift+t exec ~/.config/i3/bg_setter.sh
+
+# change screen layout
+bindsym $mod+Shift+s exec ~/.config/i3/screen_layout_select.sh 0
 
 # change focus
 bindsym $mod+j focus down
