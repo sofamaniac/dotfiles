@@ -30,16 +30,17 @@ vnoremap <leader>p "+p
 vnoremap <leader>P "+P ]]
 -- NERDTree
 vim.keymap.set('n', '<leader>x', ':NERDTreeToggle<CR>', { desc = "Toggle NERDTree" })
+vim.keymap.set('n', '<F4>', ':NERDTreeToggle<CR>', { desc = "Toggle NERDTree" })
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
 vim.keymap.set('n', '<leader>/', function()
-  -- You can pass additional configuration to telescope to change theme, layout, etc.
-  require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    winblend = 10,
-    previewer = false,
-  })
+	-- You can pass additional configuration to telescope to change theme, layout, etc.
+	require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+		winblend = 10,
+		previewer = false,
+	})
 end, { desc = '[/] Fuzzily search in current buffer]' })
 
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
@@ -61,7 +62,7 @@ vim.keymap.set('n', '<leader>sz', ":ZkNotes<CR>", { desc = '[S]earch [Z]ettelkas
 
 -- LuaSnips keymaps
 vim.keymap.set('n', '<leader>sr', "<cmd> source ~/.config/nvim/after/plugin/luasnip.lua<CR>",
-  { desc = "[S]nippets [R]eload" })
+	{ desc = "[S]nippets [R]eload" })
 
 -- Window navigation maps
 vim.keymap.set('n', '<leader>v', '<C-w>', { desc = '<C-w>' })

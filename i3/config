@@ -9,12 +9,6 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-# setting up keyboard
-exec_always --no-startup-id setxkbmap -option caps:escape
-
-# dark mode for gnome
-exec_always --no-startup-id /usr/libexec/gsd-xsettings
-
 set $mod Mod4
 
 # Gaps
@@ -27,6 +21,8 @@ border_radius 10
 
 # laptop specific configuration
 include laptop.config
+
+exec_always --no-startup-id ~/dotfiles/run_at_start.sh
 
 # Menu
 bindsym $mod+d exec rofi -show drun

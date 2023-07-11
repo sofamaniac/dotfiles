@@ -5,34 +5,15 @@
 #declare the root directory for the pape folders
 layoutdir="/home/sofamaniac/.screenlayout"
 
-#the script starts here
-folderpath="$layoutdir"
-selection=""
-
-changepape()
-{
-	eval $selection
-	eval i3-msg restart
-}
-
-change_pape_folder()
+change_screen_layout()
 {
 	options=$(ls -d "$layoutdir"/* | sed "s:\($layoutdir\)\(.*\)\/:\2:")
-	selection=$folderpath/$(echo "$options" | rofi -dmenu)	
+	selection=$layoutdir/$(echo "$options" | rofi -dmenu)	
 	if [ $? -eq 0 ]; then
-		changepape
+		eval $selection
 	else
 		exit 1
 	fi
 }
 
-###############################
-#main body
-###############################
-
-if [ -z "$*" ]; then
-	changepape
-else
-	change_pape_folder
-fi
-
+change_screen_layout

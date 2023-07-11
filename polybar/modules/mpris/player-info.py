@@ -54,7 +54,7 @@ def create_string_of_length(string, length, start=0):
     while l > length:
         i -= 1
         l -= char_size(string[i])
-    return i, length - l
+    return i, length - l -1
 
 
 def create_slices(title):

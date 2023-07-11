@@ -114,6 +114,11 @@ _G.packer_plugins = {
     path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
     url = "https://github.com/lewis6991/gitsigns.nvim"
   },
+  himalaya = {
+    loaded = true,
+    path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/himalaya",
+    url = "https://github.com/soywod/himalaya"
+  },
   ["indent-blankline.nvim"] = {
     loaded = true,
     path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
@@ -213,6 +218,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/vim-surround",
     url = "https://github.com/tpope/vim-surround"
+  },
+  ["vim-tmux-navigator"] = {
+    loaded = true,
+    path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/vim-tmux-navigator",
+    url = "https://github.com/christoomey/vim-tmux-navigator"
   },
   vimtex = {
     loaded = true,
