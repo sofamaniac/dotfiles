@@ -1,0 +1,8 @@
+---
+- name: Install Tex
+  become: true
+  become_user: root
+  ansible.builtin.package:
+    name:
+      - texlive
+    state: present

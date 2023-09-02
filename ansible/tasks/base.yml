@@ -1,0 +1,36 @@
+---
+- name: Install necessary packages
+  become: yes
+  become_user: root
+  ansible.builtin.package:
+    name:
+      - picom
+      - neofetch
+      - kitty
+      - zsh
+      - polybar
+      - dunst
+      - zathura
+      - zathura-pdf-mupdf
+      - firefox
+
+
+      - neovim
+      # packages needed for neovim
+      - nodejs
+      - npm
+      - python-pip
+      
+    state: present
+
+- name: Clone yay
+  git:
+    repo: https://aur.archlinux.org/yay-bin.git
+    dest: "{{ srcdir }}/yay"
+    update: true
+
+- name: Build and install yay
+  command:
+    chdir: "{{ srcdir }}/yay"
+    cmd: "makepkg -sfi --noconfirm"
+    creates: /usr/bin/yay

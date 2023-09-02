@@ -35,6 +35,7 @@ PACKAGES=(
 	"ocaml"
 	"opam"
 	"spotify-launcher"
+	"jgmenu"
 
 	# packages needed for neovim
 	"nodejs"

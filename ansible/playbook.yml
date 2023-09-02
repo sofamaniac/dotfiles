@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  vars:
+    laptop_hostname: 'astolfo'
+    desktop_hostname: 'mordred'
+  
+
+  tasks:
+
+    - ansible.builtin.include_vars:
+        file: vars/playbook.yml
+    # - include: tasks/tex.yml
+    - include_tasks: tasks/base.yml

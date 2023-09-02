@@ -1,0 +1,4 @@
+---
+# vars for ansible.archyay
+homedir: "{{ lookup('env','HOME') }}"
+srcdir: "{{ homedir }}/.src"
