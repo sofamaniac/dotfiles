@@ -1,0 +1,5 @@
+collections:
+  # install packages from the AUR
+  - name: kewlfft.aur
+  # order pacman mirrors (FIXME: cannot install)
+  # - name: realorangeone.reflector

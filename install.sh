@@ -70,34 +70,19 @@ prompt_laptop () {
 }
 
 install_packages () {
-	TMP="${PACKAGES[@]}"
-	if [ $LAPTOP == 2 ]; then
-		TMP="$TMP ${LAPTOP_PACKAGES[@]}"
-	fi
+
+	# order mirrors based on speed,
+	# update and install ansible
 	sudo bash -c "
 	pacman-mirrors --continent
 	pacman -Syu
-	pacman -S $TMP
 	pacman -S --needed git base-devel
+	pacman -S ansible-core ansible
 	"
-	# installing yay
-	git clone https://aur.archlinux.org/yay.git ~/yay && cd ~/yay && makepkg -si
 
-	TMP="${AUR_PACKAGES[@]}"
-	if [ $LAPTOP == 2 ]; then
-		TMP="$TMP ${LAPTOP_AUR_PACKAGES[@]}"
-	fi
-	yay -Sy $TMP
-
-	python3 -m pip install --user --upgrade pynvim
-
-	# installing i3bgwin which allows to display windows behind all other windows
-	git clone https://github.com/quantum5/i3bgwin.git ~/Downloads/i3bgwin
-	cd ~/Downloads/i3bgwin
-	make
-	mkdir ~/bin
-	mv i3bgwin ~/bin
-	cd ~
+	cd ansible
+	ansible-playbook --ask-become-pass playbook.yml
+	cd ~/dotfiles
 }
 
 configure_zsh () {

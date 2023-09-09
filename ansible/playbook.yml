@@ -9,5 +9,5 @@
 
     - ansible.builtin.include_vars:
         file: vars/playbook.yml
-    # - include: tasks/tex.yml
     - include_tasks: tasks/base.yml
+    - include_tasks: tasks/tex.yml

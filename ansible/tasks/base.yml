@@ -1,4 +1,10 @@
 ---
+
+- name: Install collections and roles together
+  community.general.ansible_galaxy_install:
+    type: both
+    requirements_file: requirements.yml
+
 - name: Install necessary packages
   become: yes
   become_user: root
@@ -13,13 +19,12 @@
       - zathura
       - zathura-pdf-mupdf
       - firefox
-
-
-      - neovim
       # packages needed for neovim
+      - neovim
       - nodejs
       - npm
       - python-pip
+      - python-pynvim
       
     state: present
 
@@ -34,3 +39,12 @@
     chdir: "{{ srcdir }}/yay"
     cmd: "makepkg -sfi --noconfirm"
     creates: /usr/bin/yay
+    
+- name: Install required package with yay
+  kewlfft.aur.aur:
+    use: yay
+    name:
+      - i3-gaps-rounded-git
+      - ttf-hack
+      - nerd-fonts-hack
+
