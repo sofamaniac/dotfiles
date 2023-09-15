@@ -1,5 +1,6 @@
 #!/bin/bash
-PLAYER_LOCATION="/home/sofamaniac/dotfiles/polybar/modules/mpris/player"
+PLAYER_LOCATION="/var/tmp/player_selector"
+touch $PLAYER_LOCATION
 selected_player=$(cat "$PLAYER_LOCATION")
 players=$(playerctl -l 2> /dev/null)
 players=("default" $players)

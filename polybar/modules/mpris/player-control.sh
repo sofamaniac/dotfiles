@@ -1,6 +1,6 @@
 #!/bin/bash
 
-player=$(cat ~/dotfiles/polybar/modules/mpris/player)
+player=$(cat /var/tmp/player_selector)
 if [ "$player" = "default" ]; then
 	playerctl $1
 else
