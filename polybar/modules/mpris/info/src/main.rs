@@ -67,7 +67,7 @@ fn split<'a>(chars: &'a [&'a str], limit: usize) -> Vec<Vec<&'a str>> {
 fn get_player() -> String {
     let mut file = match std::fs::File::open("/var/tmp/player_selector") {
         Ok(f) => f,
-        Err(_) => return "".to_string(),
+        Err(_) => return "whatever".to_string(),
     };
 
     let mut player = String::new();
