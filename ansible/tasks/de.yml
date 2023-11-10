@@ -1,0 +1,29 @@
+---
+- name: Install i3
+  kewlfft.aur.aur:
+    use: yay
+    name:
+      - i3-gaps-rounded-git
+
+- name: Install DE
+  become: yes
+  become_user: root
+  ansible.builtin.package:
+    name:
+      - picom
+      - dunst
+      - polybar
+      - sddm
+      - rofi
+
+- name: Setting up config
+  ansible.builtin.file:
+    src: '/home/sofamaniac/dotfiles/{{ item }}'
+    dest: '/home/sofamaniac/.config/{{ item }}'
+    state: link
+  loop:
+    - i3
+    - polybar
+    - dunst
+    - picom
+    - rofi

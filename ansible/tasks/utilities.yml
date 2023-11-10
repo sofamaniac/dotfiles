@@ -1,0 +1,27 @@
+---
+- name: Install utilities
+  become: yes
+  become_user: root
+  ansible.builtin.package:
+    name:
+      - kitty
+      - zsh
+      - syncthing
+      - pulseaudio
+      - tailscale
+      - redshift
+      - udisks2
+      - network-manager-applet
+      - tree
+      - openssh
+      - bat
+      - ctags
+    state: present
+
+- name: Setting up services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: true
+  loop:
+      - syncthing@sofamaniac.service
+      - tailscaled.service

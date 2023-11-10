@@ -1,0 +1,12 @@
+---
+- name: Install neovim
+  become: yes
+  become_user: root
+  ansible.builtin.package:
+    name:
+      - neovim
+      - nodejs
+      - npm
+      - python-pip
+      - python-pynvim
+    state: present

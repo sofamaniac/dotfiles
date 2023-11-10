@@ -5,29 +5,6 @@
     type: both
     requirements_file: requirements.yml
 
-- name: Install necessary packages
-  become: yes
-  become_user: root
-  ansible.builtin.package:
-    name:
-      - picom
-      - neofetch
-      - kitty
-      - zsh
-      - polybar
-      - dunst
-      - zathura
-      - zathura-pdf-mupdf
-      - firefox
-      # packages needed for neovim
-      - neovim
-      - nodejs
-      - npm
-      - python-pip
-      - python-pynvim
-      
-    state: present
-
 - name: Clone yay
   git:
     repo: https://aur.archlinux.org/yay-bin.git
@@ -39,12 +16,31 @@
     chdir: "{{ srcdir }}/yay"
     cmd: "makepkg -sfi --noconfirm"
     creates: /usr/bin/yay
-    
-- name: Install required package with yay
-  kewlfft.aur.aur:
-    use: yay
-    name:
-      - i3-gaps-rounded-git
-      - ttf-hack
-      - nerd-fonts-hack
 
+- name: Install fonts
+  become: yes
+  become_user: root
+  ansible.builtin.package:
+    name:
+      - noto-fonts
+      - noto-fonts-cjk
+      - ttf-hack-nerd
+    state: present
+
+- name: Install apps
+  become: yes
+  become_user: root
+  ansible.builtin.package:
+    name:
+      - neofetch
+      - firefox
+      - discord
+      - thunderbird
+      - zathura
+      - zathura-pdf-mupdf
+      - mpv
+      - yt-dlp
+      - jgmenu
+      - playerctl
+        # - nextcloud-client
+    state: present

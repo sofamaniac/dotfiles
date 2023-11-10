@@ -3,11 +3,12 @@
   vars:
     laptop_hostname: 'astolfo'
     desktop_hostname: 'mordred'
-  
 
   tasks:
-
     - ansible.builtin.include_vars:
         file: vars/playbook.yml
     - include_tasks: tasks/base.yml
+    - include_tasks: tasks/utilities.yml
+    - include_tasks: tasks/de.yml
+    - include_tasks: tasks/nvim.yml
     - include_tasks: tasks/tex.yml
