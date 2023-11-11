@@ -2,3 +2,6 @@
 # vars for ansible.archyay
 homedir: "{{ lookup('env','HOME') }}"
 srcdir: "{{ homedir }}/.src"
+dotfilesdir: "{{ homedir }}/dotfiles"
+configdir: "{{ dotfilesdir }}/config"
+configdest: "{{ homedir }}/.config"

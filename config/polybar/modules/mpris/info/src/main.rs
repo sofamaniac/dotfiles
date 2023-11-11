@@ -73,7 +73,7 @@ fn get_player() -> String {
     let mut player = String::new();
     match file.read_to_string(&mut player) {
         Ok(_) => player.trim().to_string(),
-        Err(_) => "".to_string(),
+        Err(_) => "whatever".to_string(),
     }
 }
 

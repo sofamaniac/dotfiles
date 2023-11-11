@@ -54,8 +54,8 @@
 
 - name: Configuring apps
   ansible.builtin.file:
-    src: '/home/sofamaniac/dotfiles/{{ item }}'
-    dest: '/home/sofamaniac/.config/{{ item }}'
+    src: '{{ configdir }}/{{ item }}'
+    dest: '{{ configdest}}/{{ item }}'
     state: link
   loop:
     - lf

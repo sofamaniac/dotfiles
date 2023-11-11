@@ -9,10 +9,11 @@
       - npm
       - python-pip
       - python-pynvim
+      - ripgrep
     state: present
 
 - name: Configuring neovim
   ansible.builtin.file:
-    src: '/home/sofamaniac/dotfiles/nvim'
-    dest: '/home/sofamaniac/.config/nvim'
+    src: '{{ configdir }}/nvim'
+    dest: '{{ configdest }}/nvim'
     state: link

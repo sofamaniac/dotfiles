@@ -123,7 +123,7 @@ bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 
 # media control
-set $playerctl_path /home/sofamaniac/dotfiles/polybar/modules/mpris/player-control.sh
+set $playerctl_path ~/.config/polybar/modules/mpris/player-control.sh
 bindsym XF86AudioPlay exec $playerctl_path play-pause
 bindsym XF86AudioNext exec $playerctl_path next
 bindsym XF86AudioPrev exec $playerctl_path previous
@@ -241,4 +241,4 @@ set $transparent         #0000007F
 assign [class="discord"] 2
 
 # layout restoring
-exec --no-startup-id "/home/sofamaniac/dotfiles/i3/layout_restore.sh"
+exec --no-startup-id "~/.config/i3/layout_restore.sh"

@@ -29,18 +29,20 @@
 
 - name: Configuring kitty
   ansible.builtin.file:
-    src: '/home/sofamaniac/dotfiles/kitty'
-    dest: '/home/sofamaniac/.config/kitty'
+    src: '{{ configdir }}/kitty'
+    dest: '{{ configdest }}/kitty'
     state: link
 
 - name: Configuring zsh
   ansible.builtin.file:
-    src: '/home/sofamaniac/dotfiles/{{ item }}'
-    dest: '/home/sofamaniac/.config/{{ item }}'
+    src: '{{ configdir }}/{{ item }}'
+    dest: '{{ homedir }}/{{ item }}'
     state: link
   loop:
     - .zshrc
     - .zsh_aliases
+    - .zshenv
+    - .zprofile
 
 - name: Setting up audio
   become: yes
