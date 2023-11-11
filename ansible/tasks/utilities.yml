@@ -9,7 +9,7 @@
       - syncthing
       - tailscale
       - udisks2
-      - network-manager
+      - networkmanager
       - network-manager-applet
       - tree
       - openssh

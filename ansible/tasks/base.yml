@@ -35,6 +35,7 @@
   ansible.builtin.package:
     name:
       - neofetch
+      - imagemagick  # required for neofetch
       - firefox
       - discord
       - thunderbird

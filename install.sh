@@ -34,7 +34,7 @@ install_packages () {
 	"
 
 	cd ansible
-	ansible-galaxy install -r requirements.yml
+	# ansible-galaxy install -r requirements.yml
 	ansible-playbook --ask-become-pass playbook.yml
 	cd ~/dotfiles
 }
