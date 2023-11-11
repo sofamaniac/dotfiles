@@ -29,3 +29,13 @@
     - picom
     - rofi
     - redshift
+
+- name: Setting up .xinitrc & .xprofile
+  ansible.builtin.file:
+    src: '{{configdir}}/{{ item }}'
+    dest: '{{ home }}/{{ item }}'
+    state: link
+  loop:
+    - .xinitrc
+    - .xprofile
+

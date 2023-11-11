@@ -19,11 +19,6 @@ border_radius 10
 
 # all instructions to start specific programs have been move to the .xprofile file
 
-# laptop specific configuration
-include laptop.config
-
-exec_always --no-startup-id ~/dotfiles/run_at_start.sh
-
 # Menu
 bindsym $mod+d exec rofi -show drun
 
