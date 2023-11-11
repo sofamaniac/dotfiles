@@ -3,12 +3,12 @@
 # Found at https://github.com/npmaile/PapeChanger/blob/master/papechanger.sh
 
 #declare the root directory for the pape folders
-walpaperdir="/home/sofamaniac/dotfiles/wallpapers"
+walpaperdir="$HOME/dotfiles/wallpapers"
 
 #the script starts here
 folderpath="$walpaperdir/$(cat .papefolder)"
 
-pickpape()
+pick_wallpaper()
 {
 	selectionfile="$(ls "$folderpath" | shuf -n 1 )"
 	selectionfullpath="$selectionfile"
@@ -16,7 +16,7 @@ pickpape()
 	echo $selectionfullpath >> .papehistory
 }
 
-changepape()
+change_wallpaper()
 {
 	numscreens="$(xrandr | grep " connected" | awk '{print $1}' | wc -l)"
 	fehargs=("--bg-fill")
@@ -30,10 +30,12 @@ changepape()
 	eval feh '"'$fehargs'"'
 }
 
-change_pape_folder()
+change_wallpaper_folder()
 {
+	ls -d *
 	options=$(ls -d "$walpaperdir"/* | sed "s:\($walpaperdir\)\(.*\)\/:\2:")
-	selection=$(echo "$options" | rofi -dmenu)	
+	echo "$options"
+	selection=$(echo "$options" | rofi -theme $HOME/.config/rofi/config/launcher.rasi -dmenu )	
 	if [ $? -eq 0 ]; then
 		echo $selection > .papefolder
 		folderpath="$walpaperdir/$(cat .papefolder)"
@@ -48,8 +50,8 @@ change_pape_folder()
 ###############################
 
 if [ -z "$*" ]; then
-	changepape
+	change_wallpaper
 else
-	change_pape_folder
+	change_wallpaper_folder
 fi
 

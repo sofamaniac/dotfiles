@@ -8,7 +8,7 @@ layoutdir="/home/sofamaniac/.screenlayout"
 change_screen_layout()
 {
 	options=$(ls -d "$layoutdir"/* | sed "s:\($layoutdir\)\(.*\)\/:\2:")
-	selection=$layoutdir/$(echo "$options" | rofi -dmenu)	
+	selection=$layoutdir/$(echo "$options" | rofi -dmenu -theme "$HOME/.config/rofi/config/launcher.rasi")	
 	if [ $? -eq 0 ]; then
 		eval $selection
 	else

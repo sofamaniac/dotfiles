@@ -18,9 +18,10 @@ gaps inner 5
 border_radius 10
 
 # all instructions to start specific programs have been move to the .xprofile file
+exec_always --no-startup-id "source ~/.xprofile"
 
 # Menu
-bindsym $mod+d exec rofi -show drun
+bindsym $mod+d exec ~/.config/rofi/bin/launcher
 
 bindsym $mod+Shift+x exec ~/dotfiles/autoclicker.sh
 
