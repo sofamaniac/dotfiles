@@ -23,6 +23,8 @@
   ansible.builtin.package:
     name:
       - noto-fonts
+      - noto-fonts-emoji
+      - noto-fonts-extra
       - noto-fonts-cjk
       - ttf-hack-nerd
     state: present
@@ -42,5 +44,19 @@
       - yt-dlp
       - jgmenu
       - playerctl
+      - lf
+      - unclutter
+      - kdeconnect
+      - arandr
         # - nextcloud-client
     state: present
+
+- name: Configuring apps
+  ansible.builtin.file:
+    src: '/home/sofamaniac/dotfiles/{{ item }}'
+    dest: '/home/sofamaniac/.config/{{ item }}'
+    state: link
+  loop:
+    - lf
+    - neofetch
+    - zathura

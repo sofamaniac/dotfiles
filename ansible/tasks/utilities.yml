@@ -7,15 +7,16 @@
       - kitty
       - zsh
       - syncthing
-      - pulseaudio
       - tailscale
-      - redshift
       - udisks2
+      - network-manager
       - network-manager-applet
       - tree
       - openssh
       - bat
       - ctags
+      - btop
+      - man
     state: present
 
 - name: Setting up services
@@ -25,3 +26,30 @@
   loop:
       - syncthing@sofamaniac.service
       - tailscaled.service
+
+- name: Configuring kitty
+  ansible.builtin.file:
+    src: '/home/sofamaniac/dotfiles/kitty'
+    dest: '/home/sofamaniac/.config/kitty'
+    state: link
+
+- name: Configuring zsh
+  ansible.builtin.file:
+    src: '/home/sofamaniac/dotfiles/{{ item }}'
+    dest: '/home/sofamaniac/.config/{{ item }}'
+    state: link
+  loop:
+    - .zshrc
+    - .zsh_aliases
+
+- name: Setting up audio
+  become: yes
+  become_user: root
+  ansible.builtin.package:
+    name:
+      - pipewire-alsa
+      - pipewire-jack
+      - pipewire-pulse
+      - pavucontrol
+    state: present
+

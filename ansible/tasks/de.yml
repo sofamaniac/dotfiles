@@ -15,6 +15,7 @@
       - polybar
       - sddm
       - rofi
+      - redshift
 
 - name: Setting up config
   ansible.builtin.file:
@@ -27,3 +28,4 @@
     - dunst
     - picom
     - rofi
+    - redshift

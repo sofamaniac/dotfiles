@@ -16,7 +16,7 @@ kdeconnect-indicator &
 unclutter &
 
 if [ "$name" = "astolfo" ]; then
-  nextcloud &
+  # nextcloud &
 fi
 
 

@@ -2,45 +2,8 @@
 
 # installing packages available directly
 PACKAGES=(
-	"picom"
-	"neofetch"
-	"dunst"
-	"kitty"
-	"zsh"
-	"neovim"
-	"lf"
-	"polybar"
 	"light"
-	"networkmanager"
-	"network-manager-applet"
-	"playerctl"
-	"feh"
-	"nextcloud-client"
-	"syncthing"
-	"discord"
 	"element-desktop"
-	"thunderbird"
-	"aerc"
-	"firefox"
-	"noto-fonts"
-	"noto-fonts-emoji"
-	"noto-fonts-extra"
-	"noto-fonts-cjk"
-	"zathura-pdf-mupdf"
-	"pavucontrol"
-	"arandr"
-	"unclutter"
-	"kdeconnect"
-	"texlive-most"
-	"ocaml"
-	"opam"
-	"spotify-launcher"
-	"jgmenu"
-
-	# packages needed for neovim
-	"nodejs"
-	"npm"
-	"python-pip"
 )
 LAPTOP_PACKAGES=(
 	# laptop specific
@@ -50,10 +13,7 @@ LAPTOP_PACKAGES=(
 	"tlp"
 )
 AUR_PACKAGES=(
-	"i3-gaps-rounded-git"
 	"pistol-git"
-	"ttf-hack"
-	"nerd-fonts-hack"
 )
 
 LAPTOP_AUR_PACKAGES=(
@@ -61,13 +21,6 @@ LAPTOP_AUR_PACKAGES=(
 	"i3-battery-popup-git"
 )
 LAPTOP=0
-
-prompt_laptop () {
-	echo "Run script for :"
-	echo "\t1) desktop"
-	echo "\t2) laptop"
-	read LAPTOP
-}
 
 install_packages () {
 
@@ -102,17 +55,7 @@ move_config_files () {
 		BASEDIR=$(pwd)
 	fi
 	FOLDERS=(
-		"i3"
-		"polybar"
-		"dunst"
-		"nvim"
-		"kitty"
-		"lf"
-		"picom"
 		"pistol"
-		"redshift"
-		"rofi"
-		"zathura"
 	)
 	for f in "${FOLDERS[@]}"
 	do
@@ -130,7 +73,7 @@ main () {
 	move_config_files
 	configure_zsh
 
-	echo "Remember to move userChrome.css to appropriate foler"
+	echo "Remember to move userChrome.css to appropriate foler (see about:support)"
 	echo "and to enable toolkit.legacyUserProfileCustomizations.stylesheets"
 	echo "in about:config"
 }

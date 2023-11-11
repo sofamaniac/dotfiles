@@ -10,3 +10,9 @@
       - python-pip
       - python-pynvim
     state: present
+
+- name: Configuring neovim
+  ansible.builtin.file:
+    src: '/home/sofamaniac/dotfiles/nvim'
+    dest: '/home/sofamaniac/.config/nvim'
+    state: link

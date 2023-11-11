@@ -1,8 +1,6 @@
 # Commands to run at start
 neofetch
 
-export DZR_CBC=g4el58wc0zvf9na1
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -10,9 +8,14 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# load autocompletion
+autoload -Uz compinit
+compinit
+# allow completion on sudo commands
+zstyle ':completion::complete:*' gain-privileges 1
+
 DEFAULT_USER="sofamaniac"
 # exporting useful variables
-export ZK_NOTEBOOK_DIR=/home/sofamaniac/Nextcloud/zk
 export EDITOR=/usr/bin/nvim
 
 # bind media keys to avoid interferences with other programs
@@ -97,7 +100,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-fzf-history-search)
+plugins=(git rust)
 
 source $ZSH/oh-my-zsh.sh
 
