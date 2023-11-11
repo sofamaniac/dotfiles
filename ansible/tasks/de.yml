@@ -33,7 +33,7 @@
 - name: Setting up .xinitrc & .xprofile
   ansible.builtin.file:
     src: '{{configdir}}/{{ item }}'
-    dest: '{{ home }}/{{ item }}'
+    dest: '{{ homedir }}/{{ item }}'
     state: link
   loop:
     - .xinitrc
