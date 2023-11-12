@@ -2,7 +2,7 @@
 - name: Install Tex
   become: true
   become_user: root
-  ansible.builtin.package:
+  community.general.pacman:
     name:
       - texlive
     state: present

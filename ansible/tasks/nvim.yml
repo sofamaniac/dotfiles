@@ -2,7 +2,7 @@
 - name: Install neovim
   become: yes
   become_user: root
-  ansible.builtin.package:
+  community.general.pacman:
     name:
       - neovim
       - nodejs

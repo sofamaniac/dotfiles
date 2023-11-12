@@ -8,7 +8,7 @@
 - name: Install DE
   become: yes
   become_user: root
-  ansible.builtin.package:
+  community.general.pacman:
     name:
       - picom
       - dunst

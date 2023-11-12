@@ -1,0 +1,17 @@
+---
+- name: Install tailscale
+  become: yes
+  become_user: root
+  block:
+    - name: Installing tailscale
+      community.general.pacman:
+        name:
+          - tailscale
+        state: present
+
+    - name: Starting tailscaled
+      ansible.builtin.systemd:
+        name: tailscaled.service
+        enabled: true
+        state: started
+

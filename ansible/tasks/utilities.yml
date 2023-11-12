@@ -2,12 +2,11 @@
 - name: Install utilities
   become: yes
   become_user: root
-  ansible.builtin.package:
+  community.general.pacman:
     name:
       - kitty
       - zsh
       - syncthing
-      - tailscale
       - udisks2
       - networkmanager
       - network-manager-applet
@@ -19,15 +18,12 @@
       - man
     state: present
 
-- name: Setting up services
+- name: Setting up syncthing service
   become: yes
   become_user: root
   ansible.builtin.systemd:
-    name: "{{ item }}"
+    name: syncthing@sofamaniac.service
     enabled: true
-  loop:
-      - syncthing@sofamaniac.service
-      - tailscaled.service
 
 - name: Configuring kitty
   ansible.builtin.file:
@@ -49,7 +45,7 @@
 - name: Setting up audio
   become: yes
   become_user: root
-  ansible.builtin.package:
+  community.general.pacman:
     name:
       - pipewire-alsa
       - pipewire-jack
