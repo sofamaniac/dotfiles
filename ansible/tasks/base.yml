@@ -49,6 +49,7 @@
       - unclutter
       - kdeconnect
       - arandr
+      - feh
         # - nextcloud-client
     state: present
 

@@ -17,6 +17,13 @@
       - rofi
       - redshift
 
+- name: Setting up sddm.service
+  become: yes
+  become_user: root
+  ansible.builtin.systemd:
+    name: sddm.service
+    enabled: true
+
 - name: Setting up config
   ansible.builtin.file:
     src: '{{configdir}}/{{ item }}'

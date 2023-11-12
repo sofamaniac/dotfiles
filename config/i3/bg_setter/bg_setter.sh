@@ -22,7 +22,7 @@ change_wallpaper()
 	fehargs=("--bg-fill")
 	while [ $numscreens -gt 0 ]
 	do
-		newarg="$(pickpape)"
+		newarg="$(pick_wallpaper)"
 		fehargs+='" "'
 		fehargs+="$newarg"
 		numscreens=$(($numscreens-1))
@@ -39,7 +39,7 @@ change_wallpaper_folder()
 	if [ $? -eq 0 ]; then
 		echo $selection > .papefolder
 		folderpath="$walpaperdir/$(cat .papefolder)"
-		changepape
+		change_wallpaper
 	else
 		exit 1
 	fi

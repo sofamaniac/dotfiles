@@ -20,6 +20,8 @@
     state: present
 
 - name: Setting up services
+  become: yes
+  become_user: root
   ansible.builtin.systemd:
     name: "{{ item }}"
     enabled: true
