@@ -47,31 +47,11 @@ configure_zsh () {
 	echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 }
 
-move_config_files () {
-
-	# moving config folders
-	BASEDIR=$(dirname "$0")
-	if [[ $BASEDIR == "." ]]; then
-		BASEDIR=$(pwd)
-	fi
-	FOLDERS=(
-		"pistol"
-	)
-	for f in "${FOLDERS[@]}"
-	do
-		rm -rf $HOME/.config/$f
-		ln -s $HOME/dotfiles/$f $HOME/.config/$f
-	done
-
-	rm -f ~/.zshrc ; ln -s ~/dotfiles/.zshrc ~/.zshrc
-	rm -f ~/.zsh_aliases ; ln -s ~/dotfiles/.zsh_aliases ~/.zsh_aliases
-	rm -f ~/.config/picom.config
-}
-
 main () {
 	install_packages
-	move_config_files
-	configure_zsh
+	# configure_zsh
+
+	sudo bash -c " tailscale up "
 
 	echo "Remember to move userChrome.css to appropriate foler (see about:support)"
 	echo "and to enable toolkit.legacyUserProfileCustomizations.stylesheets"
