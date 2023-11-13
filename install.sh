@@ -48,9 +48,12 @@ configure_zsh () {
 }
 
 main () {
-	install_packages
-	# configure_zsh
+	# ensuring submodules are up to date
+	git submodule update --init --recursive
 
+	install_packages
+
+	configure_zsh
 	sudo bash -c " tailscale up "
 
 	echo "Remember to move userChrome.css to appropriate foler (see about:support)"

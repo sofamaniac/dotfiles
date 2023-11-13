@@ -9,7 +9,8 @@
         file: vars/playbook.yml
     - include_tasks: tasks/base.yml
     - include_tasks: tasks/utilities.yml
+    - include_tasks: tasks/nvim.yml
     - include_tasks: tasks/tailscale.yml
     - include_tasks: tasks/de.yml
-    - include_tasks: tasks/nvim.yml
+    - include_tasks: tasks/sddm.yml
     - include_tasks: tasks/tex.yml
