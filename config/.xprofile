@@ -11,7 +11,7 @@ nm-applet &
 dunst -config ~/.config/dunst/dunstrc &
 kdeconnect-indicator &
 unclutter &
-redshift &
+killall redshift && redshift &
 
 if [ "$name" = "astolfo" ]; then
 	i3-battery-popup &
