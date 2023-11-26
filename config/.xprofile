@@ -1,5 +1,5 @@
 # screen setup
-HOSTNAME=$(hostname)
+HOSTNAME=$(uname -n)
 FILE=~/dotfiles/screenlayout/$HOSTNAME.sh
 if test -f "$FILE"; then
   $FILE
