@@ -26,10 +26,15 @@ require('packer').startup(function(use)
       'folke/neodev.nvim',
     },
   }
+  use { -- LuaSnip
+    'L3MON4D3/LuaSnip',
+    run = "make install_jsregexp"
+  }
+
 
   use { -- Autocompletion
     'hrsh7th/nvim-cmp',
-    requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-omni' },
+    requires = { 'hrsh7th/cmp-nvim-lsp', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-omni' },
   }
 
   use { -- Highlight, edit, and navigate code
@@ -52,8 +57,10 @@ require('packer').startup(function(use)
 
   use { 'catppuccin/nvim', as = 'catppuccin' } -- Catppuccin theme
   use 'nvim-lualine/lualine.nvim'              -- Fancier statusline
-  use 'lukas-reineke/indent-blankline.nvim'    -- Add indentation guides even on blank lines
-  use 'numToStr/Comment.nvim'                  -- "gc" to comment visual regions/lines
+  use {                                        -- Add indentation guides even on blank lines
+    'lukas-reineke/indent-blankline.nvim'
+  }
+  use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
 
   -- Fuzzy Finder (files, lsp, etc)
   use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
@@ -145,10 +152,32 @@ require('Comment').setup()
 
 -- Enable `lukas-reineke/indent-blankline.nvim`
 -- See `:help indent_blankline.txt`
-require('indent_blankline').setup {
-  char = '┊',
-  show_trailing_blankline_indent = false,
+local highlight = {
+    "RainbowRed",
+    "RainbowYellow",
+    "RainbowBlue",
+    "RainbowOrange",
+    "RainbowGreen",
+    "RainbowViolet",
+    "RainbowCyan",
 }
+local hooks = require "ibl.hooks"
+-- create the highlight groups in the highlight setup hook, so they are reset
+-- every time the colorscheme changes
+hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+    vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
+    vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
+    vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
+    vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
+    vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
+    vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+    vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+end)
+
+vim.g.rainbow_delimiters = { highlight = highlight }
+require("ibl").setup { scope = { highlight = highlight } }
+
+hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
 
 -- Gitsigns
 -- See `:help gitsigns.txt`
@@ -177,7 +206,7 @@ require('telescope').setup {
 
 -- vimwiki configuration
 vim.g.vimwiki_list = { {
-  path = '~/vimwiki/',
+  path = '~/Nextcloud/vimwiki/',
   syntax = 'markdown',
   ext = '.md'
 } }
@@ -194,40 +223,6 @@ require("luasnip").setup {
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
-
-vim.cmd([[
-
-" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
-let s:opam_share_dir = system("opam var share")
-let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
-
-let s:opam_configuration = {}
-
-function! OpamConfOcpIndent()
-  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
-endfunction
-let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
-
-function! OpamConfOcpIndex()
-  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
-endfunction
-let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
-
-function! OpamConfMerlin()
-  let l:dir = s:opam_share_dir . "/merlin/vim"
-  execute "set rtp+=" . l:dir
-endfunction
-let s:opam_configuration['merlin'] = function('OpamConfMerlin')
-
-let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
-for tool in s:opam_packages
-  " Respect package order (merlin should be after ocp-index)
-  call s:opam_configuration[tool]()
-endfor
-" ## end of OPAM user-setup addition for vim / base ## keep this line
-" ## added by OPAM user-setup for vim / ocp-indent ## cf30d8a272d8da84864a0b60c1677ac4 ## you can edit, but keep this line
-" ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line
- ]])
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

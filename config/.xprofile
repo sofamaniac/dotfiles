@@ -10,8 +10,8 @@ picom -b --config ~/.config/picom/picom.conf
 nm-applet &
 dunst -config ~/.config/dunst/dunstrc &
 kdeconnect-indicator &
-unclutter &
-killall redshift && redshift &
+killall unclutter; unclutter &
+killall redshift; redshift &
 
 if [ "$name" = "astolfo" ]; then
 	i3-battery-popup &

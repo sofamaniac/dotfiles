@@ -74,12 +74,12 @@ local snips = {
   ]], { env = i(1, "env"), content = i(2, "content") }, { repeat_duplicates = true, delimiters = "<>" }
 	)),
 
-	s({ trig = "\\c(%w)(%w)", regTrig = true },
+	s({ trig = "\\c(%w)(%w)", trigEngine = "pattern", regTrig = true },
 		f(function(_, snip) return "\\mathcal{" .. snip.captures[1] .. "}" end),
 		{ condition = math_same_char, show_condition = is_math }
 	),
 
-	s({ trig = "\\(%w)(%w)", regTrig = true },
+	s({ trig = "\\(%w)(%w)", trigEngine = "pattern", regTrig = true },
 		f(function(_, snip) return "\\mathbb{" .. snip.captures[1] .. "}" end),
 		{ condition = math_same_char, show_condition = is_math }
 	),
