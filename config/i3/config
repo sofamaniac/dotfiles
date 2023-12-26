@@ -58,6 +58,7 @@ bindsym $mod+Shift+q kill
 
 # screenshot
 bindsym $mod+Shift+p exec flameshot gui
+bindsym $mod+p exec flameshot screen
 
 # change background
 bindsym $mod+t exec ~/.config/i3/bg_setter/bg_setter.sh 0
