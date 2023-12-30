@@ -6,12 +6,15 @@ if test -f "$FILE"; then
 fi
 picom -b --config ~/.config/picom/picom.conf
 ~/.config/i3/bg_setter.sh
-~/.config/polybar/launch_polybar.sh &
+
+# application start
 nm-applet &
 dunst -config ~/.config/dunst/dunstrc &
 kdeconnect-indicator &
 killall unclutter; unclutter &
 killall redshift; redshift &
+
+~/.config/polybar/launch_polybar.sh &
 
 if [ "$name" = "astolfo" ]; then
 	i3-battery-popup &
