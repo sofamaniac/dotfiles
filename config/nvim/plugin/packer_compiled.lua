@@ -114,11 +114,6 @@ _G.packer_plugins = {
     path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
     url = "https://github.com/lewis6991/gitsigns.nvim"
   },
-  himalaya = {
-    loaded = true,
-    path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/himalaya",
-    url = "https://github.com/soywod/himalaya"
-  },
   ["indent-blankline.nvim"] = {
     loaded = true,
     path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
@@ -239,10 +234,10 @@ _G.packer_plugins = {
     path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/which-key.nvim",
     url = "https://github.com/folke/which-key.nvim"
   },
-  ["zk-nvim"] = {
+  ["yuck.vim"] = {
     loaded = true,
-    path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/zk-nvim",
-    url = "https://github.com/mickael-menu/zk-nvim"
+    path = "/home/sofamaniac/.local/share/nvim/site/pack/packer/start/yuck.vim",
+    url = "https://github.com/elkowar/yuck.vim"
   }
 }
 

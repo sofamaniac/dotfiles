@@ -1,0 +1,59 @@
+#!/bin/python
+
+import argparse
+import subprocess
+import re
+
+targets = ["mic", "vol"]
+
+def get_target(target):
+    if target == "mic":
+        return "@DEFAULT_AUDIO_SOURCE@"
+    else:
+        return "@DEFAULT_AUDIO_SINK@"
+
+class TargetChoice():
+    def __contains__(self, item):
+        return item in targets
+    def __iter__(self):
+        return targets.__iter__()
+
+class SetChoice():
+    index = 0
+    def __contains__(self, item):
+        if self.index == 0:
+            self.index += 1
+            return item in targets
+        else: 
+            return type(item) is str
+
+parser = argparse.ArgumentParser(
+	prog="volumectl",
+	description="Control the volume of the output / input of the computer"
+)
+
+parser.add_argument('-g', '--get', action="store", choices=TargetChoice())
+parser.add_argument('-s', '--set', nargs=2, action="store", dest="set_vol", choices=SetChoice(), metavar=(targets, "VOL[%][+|-]"))
+parser.add_argument('-m', '--mute', action="store", choices=TargetChoice())
+
+args = parser.parse_args()
+command = []
+if args.set_vol:
+    target = get_target(args.set_vol[0])
+    command = ["wpctl", "set-volume", target, args.set_vol[1], "--limit", "1"]
+elif args.mute:
+    target = get_target(args.mute)
+    command = ["wpctl", "set-mute", target, "toggle"]
+else:
+    target = get_target(args.get)
+    command = ["wpctl", "get-volume", target]
+
+output = subprocess.run(command, stdout=subprocess.PIPE)
+if args.get:
+    # extract all number (found on https://stackoverflow.com/a/29581287)
+    rr = re.findall("[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?", output.stdout.decode("utf-8"))
+    if len(rr) > 0:
+        val = float(rr[0]) *  100
+        print(f"{int(val)}")
+    else:
+        print("0.0")
