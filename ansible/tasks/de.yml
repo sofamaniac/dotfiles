@@ -1,9 +1,4 @@
 ---
-- name: Install i3
-  kewlfft.aur.aur:
-    use: yay
-    name:
-      - i3-gaps-rounded-git
 
 - name: Install DE
   become: yes
@@ -11,6 +6,7 @@
   community.general.pacman:
     name:
       - picom
+      - i3-wm
       - dunst
       - polybar
       - sddm
