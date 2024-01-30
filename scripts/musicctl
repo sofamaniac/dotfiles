@@ -47,7 +47,9 @@ get_artist() {
 
 ## Get time
 get_time() {
-	time=`mpc status | grep "%)" | awk '{print $4}' | tr -d '(%)'`
+	ctime=`$CMD -s position --format "{{ position }}"`
+	ttime=`$CMD -s metadata mpris:length`
+	time=`awk -v ctime="$ctime" -v ttime="$ttime" 'BEGIN{ printf "%d\n", (100 * ctime) /ttime }'`
 	if [[ -z "$time" ]]; then
 		echo "0"
 	else
@@ -79,7 +81,7 @@ get_cover() {
 	COVER=`$CMD -s metadata mpris:artUrl`
 	# Check if the file has a embbeded album art
 	if [ -n "$COVER" ];then
-		echo "$COVER"
+		echo -n "$COVER"
 	else
 		echo "images/music.png"
 	fi
@@ -88,6 +90,13 @@ get_cover() {
 ## control player
 player_ctl() {
 	$CMD $1
+}
+
+## seek absolute percent
+seek() {
+	ttime=`$CMD -s metadata mpris:length`
+	new_time=`awk -v target="$1" -v len="$ttime" 'BEGIN{ printf "%d", target / 100 * len }'`
+	$CMD position $new_time
 }
 
 ## Execute accordingly
@@ -105,6 +114,10 @@ elif [[ "$1" == "--ttime" ]]; then
 	get_ttime
 elif [[ "$1" == "--cover" ]]; then
 	get_cover
+elif [[ "$1" == "--seek" ]]; then
+	# musicctl --seek n
+	# goes to n% of playing song
+	seek $2
 elif [[ "$1" == "--toggle" ]]; then
 	{ player_ctl "play-pause"; }
 elif [[ "$1" == "--next" ]]; then

@@ -98,7 +98,6 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let mut chunks: Vec<String> = vec![];
     let mut index = 0;
     let mut wait = 2;
-    let mut last_received = time::SystemTime::now();
     loop {
         while let Ok(Some(v)) =
             tokio::time::timeout(Duration::from_millis(SHIFT_DELAY), stream.next()).await
@@ -113,7 +112,6 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
             chunks = tmp_chunks.into_iter().map(|c| c.join("")).collect();
             index = 0;
             wait = INIT_DELAY;
-            last_received = time::SystemTime::now();
         }
         if index < chunks.len() {
             println!("{}", chunks[index]);
@@ -135,17 +133,6 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
                 .build()
                 .await?;
             stream = proxy.receive_metadata_changed().await;
-        }
-        if let Ok(dur) = last_received.elapsed() {
-            // if no message in the last 5 secs try to reopen proxy
-            if dur.as_secs() > 5 {
-                player = get_player();
-                proxy = PlayerProxy::builder(&connection)
-                    .destination(format!("org.mpris.MediaPlayer2.{}", player))?
-                    .build()
-                    .await?;
-                stream = proxy.receive_metadata_changed().await;
-            }
         }
     }
 }
