@@ -1,9 +1,4 @@
-use std::{
-    collections::HashMap,
-    io::Read,
-    time::{self, Duration},
-    vec,
-};
+use std::{collections::HashMap, io::Read, time::Duration, vec};
 
 use futures_util::stream::StreamExt;
 use unicode_segmentation::UnicodeSegmentation;
@@ -20,49 +15,54 @@ trait Player {
     fn metadata(&self) -> zbus::Result<HashMap<String, zbus::zvariant::OwnedValue>>;
 }
 
-fn split<'a>(chars: &'a [&'a str], limit: usize) -> Vec<Vec<&'a str>> {
-    let mut res = vec![];
-    let mut start = 0;
-    let title = chars.join("");
-    if UnicodeWidthStr::width(title.as_str()) <= limit {
-        res.push(chars.to_vec());
-        return res;
+fn string_len(string: &str) -> usize {
+    UnicodeWidthStr::width_cjk(string)
+}
+
+/// Pad `string` to the right by adding non-breaking space
+/// until either `string` has length `lenght`
+/// or `limit` spaces have been added
+fn pad_right(string: &mut String, length: usize, limit: usize) {
+    let mut spaces = 0;
+    while string_len(string) < length && spaces < limit {
+        string.push('\u{00A0}'); // Non-breaking space
+        spaces += 1;
     }
+}
+
+fn split<'a>(chars: &'a [&'a str], limit: usize) -> Vec<String> {
+    let title = chars.join("");
+    let mut res = Vec::new();
+    if string_len(&title) <= limit {
+        res.push(title);
+        return res;
+    };
+    let mut start = 0; // index of start of current chunk
     while start < chars.len() + limit / 2 {
-        let mut chunk = vec![];
-        let mut size = 0;
+        // we have to use `chars` instead of `title` because `title[start..end]`
+        // return a slice on the *bytes* of `title` which may not be a valide utf-8 string
         let mut index = start;
-        while index < chars.len() {
-            let width = UnicodeWidthStr::width(chars[index]);
-            if size + width > limit {
-                break;
-            }
-            chunk.push(chars[index]);
+        while index < chars.len() && string_len(&chars[start..index].join("")) < limit {
             index += 1;
-            size += width;
         }
-        let mut spaces = 0;
-        while size < limit && spaces + start < limit / 2 + chars.len() {
-            chunk.push("\u{00A0}");
-            size += 1;
-            spaces += 1;
+        index = index.min(chars.len() - 1);
+        let chunk_start = start.min(index);
+        let mut chunk = chars[chunk_start..index].join("");
+        if string_len(&chunk) > limit {
+            // remove the last character
+            chunk.pop();
         }
-        let mut index2 = 0;
-        while size < limit {
-            let width = UnicodeWidthStr::width(chars[index2]);
-            if size + width > limit {
+        // A chunk looks something like `Titletitle    { spaces }     Titletitle`
+        // with the blank space measuring `limit / 2`
+        pad_right(&mut chunk, limit, limit / 2 + chars.len() - start);
+        for c in chars {
+            chunk.push_str(c);
+            if string_len(&chunk) >= limit {
+                chunk.pop();
                 break;
             }
-            chunk.push(chars[index2]);
-            index2 += 1;
-            size += width;
         }
-        let mut spaces = 0;
-        while size < limit && spaces < limit / 2 {
-            chunk.push("\u{00A0}"); // Non-breaking space
-            size += 1;
-            spaces += 1;
-        }
+        pad_right(&mut chunk, limit, limit / 2 + chars.len() - start);
         start += 1;
         res.push(chunk);
     }
@@ -108,8 +108,7 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
                 None => continue,
             };
             let chars = UnicodeSegmentation::graphemes(title, true).collect::<Vec<&str>>();
-            let tmp_chunks = split(&chars, LIMIT);
-            chunks = tmp_chunks.into_iter().map(|c| c.join("")).collect();
+            chunks = split(&chars, LIMIT);
             index = 0;
             wait = INIT_DELAY;
         }

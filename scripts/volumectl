@@ -32,28 +32,51 @@ parser = argparse.ArgumentParser(
 	description="Control the volume of the output / input of the computer"
 )
 
-parser.add_argument('-g', '--get', action="store", choices=TargetChoice())
-parser.add_argument('-s', '--set', nargs=2, action="store", dest="set_vol", choices=SetChoice(), metavar=(targets, "VOL[%][+|-]"))
-parser.add_argument('-m', '--mute', action="store", choices=TargetChoice())
+parser.add_argument('-g', '--get', action="store", choices=TargetChoice(), help="get the volume of the specified target (value between 0 and 100)")
+parser.add_argument('-s', '--set', nargs=2, action="store", dest="set_vol", choices=TargetChoice(), metavar=(f"{{{targets[0]},{targets[1]}}}", "VOL[%][+|-]"), help="set the volume of the target to the nearest inferior multiple of 5")
+parser.add_argument('-m', '--mute', action="store", choices=TargetChoice(), help="toggle mute for the target")
 
 args = parser.parse_args()
-command = []
-if args.set_vol:
-    target = get_target(args.set_vol[0])
-    command = ["wpctl", "set-volume", target, args.set_vol[1], "--limit", "1"]
-elif args.mute:
-    target = get_target(args.mute)
-    command = ["wpctl", "set-mute", target, "toggle"]
-else:
-    target = get_target(args.get)
-    command = ["wpctl", "get-volume", target]
 
-output = subprocess.run(command, stdout=subprocess.PIPE)
-if args.get:
+def run_command(cmd):
+    """Return a float between 0 and 100"""
+    output = subprocess.run(cmd, stdout=subprocess.PIPE)
     # extract all number (found on https://stackoverflow.com/a/29581287)
     rr = re.findall("[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?", output.stdout.decode("utf-8"))
     if len(rr) > 0:
-        val = float(rr[0]) *  100
-        print(f"{int(val)}")
+        val = float(rr[0]) * 100
+        return val
     else:
-        print("0.0")
+        return 0.0
+
+
+def get_volume(target):
+    command = ["wpctl", "get-volume", target]
+    output = run_command(command)
+    print(f"{int(output)}")
+    return output
+
+def mute(target):
+    command = ["wpctl", "set-mute", target, "toggle"]
+    return run_command(command)
+
+def set_volume(target, vol):
+    command = ["wpctl", "set-volume", target, vol, "--limit", "1"]
+    run_command(command)
+    # set volume to nearest inferior multiple of 5
+    val = get_volume(target)
+    if int(val) % 5 != 0:
+        vol = int(val) - (val % 5)
+        vol = vol / 100
+        vol = str(vol)
+        set_volume(target, vol)
+
+if args.set_vol:
+    target = get_target(args.set_vol[0])
+    set_volume(target, args.set_vol[1])
+elif args.mute:
+    target = get_target(args.mute)
+    mute(target)
+else:
+    target = get_target(args.get)
+    get_volume(target)
