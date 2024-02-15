@@ -104,7 +104,7 @@ plugins=(git rust tmux)
 
 
 # TMUX plugin config
-ZSH_TMUX_AUTOSTART="true"
+# ZSH_TMUX_AUTOSTART="true"
 ZSH_TMUX_AUTOSTART_ONCE="true"
 
 source $ZSH/oh-my-zsh.sh
