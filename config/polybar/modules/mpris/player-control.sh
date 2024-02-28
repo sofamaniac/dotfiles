@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 player=$(cat /var/tmp/player_selector)
 if [ "$player" = "default" ]; then

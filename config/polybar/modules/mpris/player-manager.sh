@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 player_status=$($POLYBAR_BASE/modules/mpris/player-status.sh)
 

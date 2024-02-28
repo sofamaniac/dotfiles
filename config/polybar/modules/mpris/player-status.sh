@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 # return the status of the currently selected player
 
 player=$(cat /var/tmp/player_selector)

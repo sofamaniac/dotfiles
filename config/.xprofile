@@ -12,7 +12,7 @@ nm-applet &
 dunst -config ~/.config/dunst/dunstrc &
 kdeconnect-indicator &
 killall unclutter; unclutter &
-killall redshift; redshift &
+# killall redshift; redshift &
 
 ~/.config/polybar/launch_polybar.sh &
 

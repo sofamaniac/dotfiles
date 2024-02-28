@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 PLAYER_LOCATION="/var/tmp/player_selector"
 touch $PLAYER_LOCATION
 selected_player=$(cat "$PLAYER_LOCATION")

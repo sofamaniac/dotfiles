@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python
 
 import argparse
 import subprocess
@@ -33,7 +33,7 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument('-g', '--get', action="store", choices=TargetChoice(), help="get the volume of the specified target (value between 0 and 100)")
-parser.add_argument('-s', '--set', nargs=2, action="store", dest="set_vol", choices=TargetChoice(), metavar=(f"{{{targets[0]},{targets[1]}}}", "VOL[%][+|-]"), help="set the volume of the target to the nearest inferior multiple of 5")
+parser.add_argument('-s', '--set', nargs=2, action="store", dest="set_vol", choices=SetChoice(), metavar=(f"{{{targets[0]},{targets[1]}}}", "VOL[%][+|-]"), help="set the volume of the target to the nearest inferior multiple of 5")
 parser.add_argument('-m', '--mute', action="store", choices=TargetChoice(), help="toggle mute for the target")
 
 args = parser.parse_args()
