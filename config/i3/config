@@ -118,10 +118,10 @@ bindsym XF86AudioLowerVolume exec $volumectl --set vol 5%-
 bindsym XF86AudioMute exec $volumectl --mute vol
 
 # media control
-set $playerctl_path ~/.config/polybar/modules/mpris/player-control.sh
-bindsym XF86AudioPlay exec $playerctl_path play-pause
-bindsym XF86AudioNext exec $playerctl_path next
-bindsym XF86AudioPrev exec $playerctl_path previous
+set $musicctl ~/dotfiles/scripts/musicctl
+bindsym XF86AudioPlay exec $musicctl --toggle
+bindsym XF86AudioNext exec $musicctl --next
+bindsym XF86AudioPrev exec $musicctl --prev
 
 
 # focus the child container

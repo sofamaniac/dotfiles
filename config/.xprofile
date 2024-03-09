@@ -1,21 +1,30 @@
-# screen setup
-HOSTNAME=$(uname -n)
-FILE=~/dotfiles/screenlayout/$HOSTNAME.sh
-if test -f "$FILE"; then
-  $FILE
+# Ensures .xprofile is sourced only once
+# as it sourced twice in nixos (https://github.com/NixOS/nixpkgs/issues/119513)
+if [ -z $_XPROFILE_SOURCED ]; then
+  export _XPROFILE_SOURCED=1
+  
+  # everything goes here
+	# screen setup
+	HOSTNAME=$(uname -n)
+	FILE=~/dotfiles/screenlayout/$HOSTNAME.sh
+	if test -f "$FILE"; then
+		$FILE
+	fi
+	picom -b --config ~/.config/picom/picom.conf
+	~/.config/i3/bg_setter.sh
+
+	# application start
+	nm-applet &
+	dunst -config ~/.config/dunst/dunstrc &
+	kdeconnect-indicator &
+	# pkill unclutter; unclutter &
+	# pkill redshift; redshift &
+
+	pkill polybar; ~/.config/polybar/launch_polybar.sh &
+
+	if [ "$HOSTNAME" = "astolfo" ]; then
+		i3-battery-popup &
+	fi
+
 fi
-picom -b --config ~/.config/picom/picom.conf
-~/.config/i3/bg_setter.sh
 
-# application start
-nm-applet &
-dunst -config ~/.config/dunst/dunstrc &
-kdeconnect-indicator &
-killall unclutter; unclutter &
-# killall redshift; redshift &
-
-~/.config/polybar/launch_polybar.sh &
-
-if [ "$name" = "astolfo" ]; then
-	i3-battery-popup &
-fi
