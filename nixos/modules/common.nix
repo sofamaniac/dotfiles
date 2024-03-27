@@ -1,13 +1,14 @@
-{ config, pkgs, ... }:
 {
-	imports = [
-		./home-manager/picom
-		./home-manager/zsh
-		./home-manager/kitty
-		./home-manager/firefox
-	];
-
-
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [
+    ./home-manager/picom
+    ./home-manager/zsh
+    ./home-manager/kitty
+    ./home-manager/firefox
+  ];
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -75,38 +76,47 @@
   #  /etc/profiles/per-user/sofamaniac/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-		EDITOR = "nvim";
-		POLYBAR_BASE = "/home/sofamaniac/.config/polybar";
+    EDITOR = "nvim";
+    POLYBAR_BASE = "/home/sofamaniac/.config/polybar";
   };
+  home.sessionPath = ["$HOME/bin"];
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-	services.redshift = {
-		enable = true;
-		provider = "geoclue2";
-	};
-	services.unclutter = {
-		enable = true;
-	};
-	services.network-manager-applet.enable = true;
-	services.kdeconnect = { 
-		enable = true;
-		indicator = true;
-	};
-	programs.zathura.enable = true;
+  services.redshift = {
+    enable = true;
+    provider = "geoclue2";
+  };
+  services.unclutter = {
+    enable = true;
+  };
+  services.network-manager-applet.enable = true;
+  services.kdeconnect = {
+    enable = true;
+    indicator = true;
+  };
+  programs.zathura.enable = true;
 
-	# https://github.com/nix-community/home-manager/issues/2064
-	systemd.user.targets.tray = {
-		Unit = {
-			Description = "Home Manager System Tray";
-			Requires = [ "graphical-session-pre.target" ];
-		};
-	};
-	services.syncthing.enable = true;
-	programs.direnv = {
-		enable = true;
-		enableZshIntegration = true;
-		nix-direnv.enable = true;
-	};
+  # https://github.com/nix-community/home-manager/issues/2064
+  systemd.user.targets.tray = {
+    Unit = {
+      Description = "Home Manager System Tray";
+      Requires = ["graphical-session-pre.target"];
+    };
+  };
+  services.syncthing.enable = true;
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+  };
+  services.dunst = {
+    enable = true;
+    configFile = ../../config/dunst/dunstrc;
+  };
+  programs.yazi = {
+    enable = true;
+    enableZshIntegration = true;
+  };
 }

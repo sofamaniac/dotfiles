@@ -87,6 +87,9 @@ require('packer').startup(function(use)
   -- Eww syntax highlighting
   use("elkowar/yuck.vim")
 
+  -- Adds extra functionality over rust analyzer
+  use("simrat39/rust-tools.nvim")
+
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
   if has_plugins then

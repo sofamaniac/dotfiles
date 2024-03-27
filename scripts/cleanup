@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+# delete generations older than 7 days
+# and automatically clean store
+nix-collect-garbage --delete-older-than 7d
+
+
+

@@ -1,10 +1,12 @@
-{ stdenv, fetchFromGitHub }:
 {
+  stdenv,
+  fetchFromGitHub,
+}: {
   sddm-catppuccin = stdenv.mkDerivation rec {
     pname = "sddm-catppuccin";
     version = "53f81e3";
     dontBuild = true;
-		installPhase = ''
+    installPhase = ''
       mkdir -p $out/share/sddm/themes
       cp -aR $src/src/catppuccin-macchiato $out/share/sddm/themes/catppuccin-macchiato
     '';

@@ -1,31 +1,46 @@
-{ config, pkgs, inputs, nikspkg, ... }:
-let 
-	# cf docs for more info on how it works https://nixos.org/guides/nix-pills/callpackage-design-pattern.html
-	callPackage = path: overrides:
-    let f = import path;
-    in f ((builtins.intersectAttrs (builtins.functionArgs f) pkgs) // overrides);
-
-	# Compiling the keyboard layout helps catching error in config at build time
-	compiledLayout = pkgs.runCommand "keyboard-layout" {} ''
-    ${pkgs.xorg.xkbcomp}/bin/xkbcomp ${../../keymaps/azerty} $out
-  '';
-
-in
 {
+  config,
+  pkgs,
+  inputs,
+  nikspkg,
+  ...
+}: let
+  # cf docs for more info on how it works https://nixos.org/guides/nix-pills/callpackage-design-pattern.html
+  callPackage = path: overrides: let
+    f = import path;
+  in
+    f ((builtins.intersectAttrs (builtins.functionArgs f) pkgs) // overrides);
 
-	# Enabling flakes
-	nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # Compiling the keyboard layout helps catching error in config at build time
+  compiledLayout = pkgs.runCommand "keyboard-layout" {} ''
+    ${pkgs.xorg.xkbcomp}/bin/xkbcomp ${../../../keymaps/azerty} $out
+  '';
+in {
+  # Enabling flakes
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
-	# I'm just trying to build a rust app :((((
-	programs.nix-ld.enable = true;
+  programs.nix-ld.enable = true;
 
   programs.nix-ld.libraries = with pkgs; [
-
     # Add any missing dynamic libraries for unpackaged programs
-
     # here, NOT in environment.systemPackages
-
   ];
+
+  # optimize nix store size
+  nix.optimise.automatic = true;
+
+  # enable auto updates
+  system.autoUpgrade = {
+    enable = true;
+    flake = inputs.self.outPath;
+    flags = [
+      "--update-input"
+      "nixpkgs"
+      "-L" # print build logs
+    ];
+    dates = "14:00";
+    randomizedDelaySec = "45min";
+  };
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -36,20 +51,20 @@ in
 
   # Enable bluetooth
   hardware.bluetooth.enable = true;
-	hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
-	services.blueman.enable = true;
+  hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
+  services.blueman.enable = true;
 
-	# Enable OpenGL
-	hardware.opengl.enable = true;
-	hardware.opengl.driSupport32Bit = true;
+  # Enable OpenGL
+  hardware.opengl.enable = true;
+  hardware.opengl.driSupport32Bit = true;
 
-	# Enable steam
-	nixpkgs.config.allowUnfree = true;
-	programs.steam = {
-		enable = true;
-		remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-		dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-	};
+  # Enable steam
+  nixpkgs.config.allowUnfree = true;
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Paris";
@@ -69,62 +84,59 @@ in
     LC_TIME = "fr_FR.UTF-8";
   };
 
-	# Enable geoclue2 for redshift
-	services.geoclue2.enable = true;
+  # Enable geoclue2 for redshift
+  services.geoclue2.enable = true;
 
-	services.udisks2.enable = true;
+  services.udisks2.enable = true;
 
-	# Tailscale configuration
-	services.tailscale.enable = true;
-	services.tailscale.useRoutingFeatures = "client";  # required to use exit node cf wiki for more info
+  # Tailscale configuration
+  services.tailscale.enable = true;
+  services.tailscale.useRoutingFeatures = "client"; # required to use exit node cf wiki for more info
 
   # Enable the X11 windowing system.
-	services.xserver = {
-		enable = true;
-		# touchpad configuration
-		libinput = {
-			enable = true;
-			touchpad = {
-				naturalScrolling = true;
-				clickMethod = "buttonareas";
-			};
-		};
-		# Configuring sddm
-		displayManager = {
-			sddm = {
-				enable = true;
-				theme = "catppuccin-macchiato";
-			};
-		};
-  	# Configure keymap in X11
-		xkb = {
-			layout = "fr";
-			variant = "";
-		};
-		sessionCommands = "${pkgs.xorg.xkbcomp}/bin/xkbcomp ${compiledLayout} $DISPLAY";
-  	# Enabling i3
-		windowManager = {
-			i3 = { 
-				enable = true;
-				extraPackages = with pkgs; [
-					rofi
-					polybarFull
-					jgmenu
-					picom
-					feh
-				];
-			};
-		};
-	};
-	services.dunst = {
-		enable = true;
-		configFile = ../../../config/dunst/dunstrc
-	}
+  services.xserver = {
+    enable = true;
+    # touchpad configuration
+    libinput = {
+      enable = true;
+      touchpad = {
+        naturalScrolling = true;
+        clickMethod = "buttonareas";
+      };
+    };
+    # Configuring sddm
+    displayManager = {
+      sddm = {
+        enable = true;
+        theme = "catppuccin-macchiato";
+      };
+			# setting custom keymap
+      sessionCommands = "${pkgs.xorg.xkbcomp}/bin/xkbcomp ${compiledLayout} $DISPLAY";
+    };
+    # Configure keymap in X11
+    xkb = {
+      layout = "fr";
+      variant = "";
+    };
+    # Enabling i3
+    windowManager = {
+      i3 = {
+        enable = true;
+        extraPackages = with pkgs; [
+          rofi
+          polybarFull
+          jgmenu
+          picom
+          feh
+					xdotool
+        ];
+      };
+    };
+  };
 
   # Configure console keymap
-  # console.keyMap = "fr";
-	# use same config as xserver
-	console.useXkbConfig
+  # use same config as xserver
+  console.useXkbConfig = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -150,59 +162,63 @@ in
   users.users.sofamaniac = {
     isNormalUser = true;
     description = "sofamaniac";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = ["networkmanager" "wheel"];
     packages = with pkgs; [
       firefox
-    #  thunderbird
+      #  thunderbird
     ];
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-		#  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-		#  wget
-		kitty
-		sddm
-		git	
-		xorg.xkbcomp
-		playerctl
-		clang
-		oh-my-zsh
-		tmux
-		neofetch
-		bat
-		btop
-		zsh-powerlevel10k
-		ctags
-		jq
-		python3
-		ctags
-		# required by YAMA #
-		yt-dlp
-		openssl
-		mpv
-		ffmpeg
-		# ================ #
-		rustup
-		home-manager
-		wineWowPackages.stable  # wine with 32 and 64 bits support
-		xclip  # required for clipboard support in vim
-		ripgrep
-		(callPackage ./sddm-catppuccin.nix {}).sddm-catppuccin
+    kitty
+		tree
+    sddm
+    git
+		fzf
+    ripgrep
+    rustup
+    xorg.xkbcomp
+    playerctl
+    clang
+		llvm
+		pkgs.llvmPackages.bintools  # lld linker for rust
+    oh-my-zsh
+    tmux
+    neofetch
+    bat
+    btop
+    zsh-powerlevel10k
+    ctags
+    jq
+    python3
+    ctags
+    # required by YAMA #
+    yt-dlp
+    openssl
+    mpv
+    ffmpeg
+    # ================ #
+    home-manager
+    wineWowPackages.stable # wine with 32 and 64 bits support
+    xclip # required for clipboard support in vim
+    (callPackage ./sddm-catppuccin.nix {}).sddm-catppuccin
     pkgs.catppuccin-gtk
+    wget
+    unzip
   ];
 
-	# Setting up fonts 
-	fonts.packages = with pkgs; [
-		noto-fonts
-		noto-fonts-cjk
-		noto-fonts-emoji
-		noto-fonts-extra
-		(nerdfonts.override { fonts = [ "Hack" ]; })
-	];
-	fonts.fontDir.enable = true;
-	# Set default fonts
+  # Setting up fonts
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    noto-fonts-extra
+    (nerdfonts.override {fonts = ["Hack"];})
+  ];
+  fonts.fontDir.enable = true;
+  # Set default fonts
   fonts.fontconfig.defaultFonts = {
     monospace = [
       "Hack Nerd Font"
@@ -218,24 +234,24 @@ in
       "Noto Serif"
       "Noto Serif CJK JP"
     ];
-	};
+  };
 
-	# Enable neovim
-	programs.neovim = {
-		enable = true;
-		defaultEditor = true;
-		viAlias = true;
-		vimAlias = true;
-		withPython3 = true;
-		withNodeJs = true;
-	};
+  # Enable neovim
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+    withPython3 = true;
+    withNodeJs = true;
+  };
 
-	# Enabling zsh
-	programs.zsh.enable = true;
-	users.defaultUserShell = pkgs.zsh;
+  # Enabling zsh
+  programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
 
-	# Gtk theming
-	# This next stuff is technically not necessary if you're going to use
+  # Gtk theming
+  # This next stuff is technically not necessary if you're going to use
   # a theme chooser or set it in your user settings, but if you go
   # through all this effort might as well set it system-wide.
   #
@@ -262,8 +278,7 @@ in
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-	services.openssh.settings.PasswordAuthentication = false;
-	users.users.sofamaniac.openssh.authorizedKeys.keyFiles = [ ../../../../.ssh/id_rsa.pub ];
+  services.openssh.settings.PasswordAuthentication = false;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

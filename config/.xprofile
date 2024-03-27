@@ -15,12 +15,14 @@ if [ -z $_XPROFILE_SOURCED ]; then
 
 	# application start
 	nm-applet &
-	dunst -config ~/.config/dunst/dunstrc &
 	kdeconnect-indicator &
-	# pkill unclutter; unclutter &
-	# pkill redshift; redshift &
 
-	pkill polybar; ~/.config/polybar/launch_polybar.sh &
+	# update hwmon path for polybar
+	for i in /sys/class/hwmon/hwmon*/temp*_input; do
+		if [ "$(<$(dirname $i)/name): $(cat ''${i%_*}_label 2>/dev/null || echo $(basename ''${i%_*}))" = "coretemp: Core 0" ]; then
+				export HWMON_PATH="$i"
+		fi
+	done
 
 	if [ "$HOSTNAME" = "astolfo" ]; then
 		i3-battery-popup &
@@ -28,3 +30,5 @@ if [ -z $_XPROFILE_SOURCED ]; then
 
 fi
 
+# dunst -config ~/dotfiles/config/dunst/dunstrc &
+pkill polybar; ~/.config/polybar/launch_polybar.sh &

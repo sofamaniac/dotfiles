@@ -8,33 +8,45 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-		rust-overlay.url = "github:oxalica/rust-overlay";
-		nix-colors.url = "github:misterio77/nix-colors";
+    rust-overlay.url = "github:oxalica/rust-overlay";
+    nix-colors.url = "github:misterio77/nix-colors";
+    alejandra = {
+      url = "github:kamadorueda/alejandra/3.0.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, rust-overlay, ... }@inputs:
-    let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in
-    {
-			nixosConfigurations = {
-				astolfo = nixpkgs.lib.nixosSystem {
-					specialArgs = {inherit inputs;};
-					modules = [ 
-						./modules/nixos
-						./hosts/astolfo/configuration.nix
-						home-manager.nixosModules.home-manager
-              {
-                home-manager.useGlobalPkgs = true;
-                home-manager.users.sofamaniac = ./modules/common.nix;
-              }
-						({ pkgs, ... }: {
-							nixpkgs.overlays = [ rust-overlay.overlays.default ];
-							environment.systemPackages = [ pkgs.rust-bin.stable.latest.default ];
-						})
-					];
-      	};
-			};
-  	};
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    rust-overlay,
+    alejandra,
+    ...
+  } @ inputs: let
+    system = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${system};
+  in {
+    nixosConfigurations = {
+      astolfo = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs;};
+        modules = [
+          ./modules/nixos
+          ./hosts/astolfo/configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.users.sofamaniac = ./modules/common.nix;
+          }
+          ({pkgs, ...}: {
+            nixpkgs.overlays = [rust-overlay.overlays.default];
+            environment.systemPackages = [pkgs.rust-bin.stable.latest.default];
+          })
+          {
+            environment.systemPackages = [alejandra.defaultPackage.${system}];
+          }
+        ];
+      };
+    };
+  };
 }
