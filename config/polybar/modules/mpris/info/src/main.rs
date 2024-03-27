@@ -19,52 +19,33 @@ fn string_len(string: &str) -> usize {
     UnicodeWidthStr::width_cjk(string)
 }
 
-/// Pad `string` to the right by adding non-breaking space
-/// until either `string` has length `lenght`
-/// or `limit` spaces have been added
-fn pad_right(string: &mut String, length: usize, limit: usize) {
-    let mut spaces = 0;
-    while string_len(string) < length && spaces < limit {
-        string.push('\u{00A0}'); // Non-breaking space
-        spaces += 1;
-    }
-}
-
 fn split<'a>(chars: &'a [&'a str], limit: usize) -> Vec<String> {
-    let title = chars.join("");
+    let mut title = chars.to_vec();
     let mut res = Vec::new();
-    if string_len(&title) <= limit {
-        res.push(title);
+    // If the title is short enough, no need to build chunks
+    if string_len(&chars.join("")) <= limit {
+        res.push(chars.join(""));
         return res;
     };
-    let mut start = 0; // index of start of current chunk
-    while start < chars.len() + limit / 2 {
-        // we have to use `chars` instead of `title` because `title[start..end]`
-        // return a slice on the *bytes* of `title` which may not be a valide utf-8 string
-        let mut index = start;
-        while index < chars.len() && string_len(&chars[start..index].join("")) < limit {
-            index += 1;
+    // title = "TITLE {space} TITLE" with limit/2 spaces
+    title.resize(title.len() + limit / 2, "\u{00A0}");
+    for c in chars {
+        title.push(c);
+    }
+    for index in 0..(chars.len() + limit / 2) {
+        let mut end = index;
+        while string_len(&title[index..end].join("")) < limit {
+            end += 1;
         }
-        index = index.min(chars.len() - 1);
-        let chunk_start = start.min(index);
-        let mut chunk = chars[chunk_start..index].join("");
-        if string_len(&chunk) > limit {
-            // remove the last character
-            chunk.pop();
+        if string_len(&title[index..end].join("")) > limit {
+            end -= 1;
         }
-        // A chunk looks something like `Titletitle    { spaces }     Titletitle`
-        // with the blank space measuring `limit / 2`
-        pad_right(&mut chunk, limit, limit / 2 + chars.len() - start);
-        for c in chars {
-            chunk.push_str(c);
-            if string_len(&chunk) >= limit {
-                chunk.pop();
-                break;
-            }
+        let mut s = title[index..end].join("");
+        // pad right to the correct length
+        while string_len(&s) < limit {
+            s.push('\u{00A0}');
         }
-        pad_right(&mut chunk, limit, limit / 2 + chars.len() - start);
-        start += 1;
-        res.push(chunk);
+        res.push(s);
     }
     res
 }
@@ -82,25 +63,56 @@ fn get_player() -> String {
     }
 }
 
-const LIMIT: usize = 20;
-const SHIFT_DELAY: u64 = 500;
+struct ConnectionHandler<'a> {
+    connection: Connection,
+    proxy: PlayerProxy<'a>,
+    player: String,
+    pub stream: zbus::PropertyStream<'a, HashMap<String, zbus::zvariant::OwnedValue>>,
+}
+
+impl<'a> ConnectionHandler<'a> {
+    pub async fn update(&mut self) -> Result<(), zbus::Error> {
+        self.player = get_player();
+        self.proxy = PlayerProxy::builder(&self.connection)
+            .destination(format!("org.mpris.MediaPlayer2.{}", self.player))?
+            .build()
+            .await?;
+        self.stream = self.proxy.receive_metadata_changed().await;
+        Ok(())
+    }
+    pub async fn new() -> Result<Self, zbus::Error> {
+        let connection = Connection::session().await?;
+        let player = get_player();
+        let proxy = PlayerProxy::builder(&connection)
+            .destination(format!("org.mpris.MediaPlayer2.{}", player))?
+            .build()
+            .await?;
+        let stream = proxy.receive_metadata_changed().await;
+        Ok(ConnectionHandler {
+            connection,
+            proxy,
+            player,
+            stream,
+        })
+    }
+    pub fn need_update(&self) -> bool {
+        get_player() != self.player
+    }
+}
+
+const LIMIT: usize = 20; // chunks length
+const SHIFT_DELAY: Duration = Duration::from_millis(500);
 const INIT_DELAY: u64 = 5; // INIT_DELAY * SHIFT_DELAY ms to wait before starting scrolling
 
 #[tokio::main]
 async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
-    let connection = Connection::session().await?;
-    let mut player = get_player();
-    let mut proxy = PlayerProxy::builder(&connection)
-        .destination(format!("org.mpris.MediaPlayer2.{}", player))?
-        .build()
-        .await?;
-    let mut stream = proxy.receive_metadata_changed().await;
+    let mut connection_handler = ConnectionHandler::new().await?;
     let mut chunks: Vec<String> = vec![];
     let mut index = 0;
     let mut wait = 2;
     loop {
         while let Ok(Some(v)) =
-            tokio::time::timeout(Duration::from_millis(SHIFT_DELAY), stream.next()).await
+            tokio::time::timeout(SHIFT_DELAY, connection_handler.stream.next()).await
         {
             let data = v.get().await?;
             let title: &str = match data.get("xesam:title") {
@@ -120,18 +132,10 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         } else {
             wait -= 1;
         }
-        let player2 = get_player();
-        if index >= chunks.len() || player2 != player {
-            index = 0;
-            wait = INIT_DELAY;
-        }
-        if player2 != player {
-            player = player2;
-            proxy = PlayerProxy::builder(&connection)
-                .destination(format!("org.mpris.MediaPlayer2.{}", player))?
-                .build()
-                .await?;
-            stream = proxy.receive_metadata_changed().await;
+        if connection_handler.need_update() || index >= chunks.len() {
+            // Update the handler if the player has changed
+            // but also force update periodically
+            connection_handler.update().await?;
         }
     }
 }
