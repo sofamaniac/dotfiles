@@ -21,14 +21,14 @@
     };
 
     initExtra = ''
-      neofetch
-      [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+         neofetch
+         [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-			# adding cargo bin to PATH
-			export PATH="$PATH:/home/sofamaniac/.cargo/bin"
+      # adding cargo bin to PATH
+      export PATH="$PATH:/home/sofamaniac/.cargo/bin"
 
-      # direnv setup
-      eval "$(direnv hook zsh)"
+         # direnv setup
+         eval "$(direnv hook zsh)"
     '';
 
     plugins = [

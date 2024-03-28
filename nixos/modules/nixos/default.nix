@@ -110,7 +110,7 @@ in {
         enable = true;
         theme = "catppuccin-macchiato";
       };
-			# setting custom keymap
+      # setting custom keymap
       sessionCommands = "${pkgs.xorg.xkbcomp}/bin/xkbcomp ${compiledLayout} $DISPLAY";
     };
     # Configure keymap in X11
@@ -128,7 +128,7 @@ in {
           jgmenu
           picom
           feh
-					xdotool
+          xdotool
         ];
       };
     };
@@ -173,17 +173,17 @@ in {
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     kitty
-		tree
+    tree
     sddm
     git
-		fzf
+    fzf
     ripgrep
     rustup
     xorg.xkbcomp
     playerctl
     clang
-		llvm
-		pkgs.llvmPackages.bintools  # lld linker for rust
+    llvm
+    llvmPackages.bintools # lld linker for rust
     oh-my-zsh
     tmux
     neofetch

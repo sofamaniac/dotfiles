@@ -17,8 +17,8 @@
       settings = {
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         "media.ffmpeg.vaapi.enabled" = true;
-				# disable Alt menu
-				"ui.key.menuAccessKeyFocuses" = false;
+        # disable Alt menu
+        "ui.key.menuAccessKeyFocuses" = false;
       };
     };
   };

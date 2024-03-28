@@ -8,6 +8,7 @@
     ./home-manager/zsh
     ./home-manager/kitty
     ./home-manager/firefox
+    ./home-manager/dunst
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -110,10 +111,6 @@
     enable = true;
     enableZshIntegration = true;
     nix-direnv.enable = true;
-  };
-  services.dunst = {
-    enable = true;
-    configFile = ../../config/dunst/dunstrc;
   };
   programs.yazi = {
     enable = true;
