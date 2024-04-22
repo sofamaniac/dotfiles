@@ -3,7 +3,6 @@
 if [ -z $_XPROFILE_SOURCED ]; then
   export _XPROFILE_SOURCED=1
   
-  # everything goes here
 	# screen setup
 	HOSTNAME=$(uname -n)
 	FILE=~/dotfiles/screenlayout/$HOSTNAME.sh
@@ -28,7 +27,8 @@ if [ -z $_XPROFILE_SOURCED ]; then
 		i3-battery-popup &
 	fi
 
+	pkill polybar; ~/.config/polybar/launch_polybar.sh &
+
 fi
 
 # dunst -config ~/dotfiles/config/dunst/dunstrc &
-pkill polybar; ~/.config/polybar/launch_polybar.sh &
