@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-player_status=$($POLYBAR_BASE/modules/mpris/player-status.sh)
+player_status=$(~/.config/polybar/modules/mpris/player-status.sh)
 
 if [ "$player_status" = "Playing" ] || [ "$player_status" = "Paused" ] ; then
 	polybar-msg action "#player-prev.module_show"
