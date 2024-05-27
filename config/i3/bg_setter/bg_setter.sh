@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Found at https://github.com/npmaile/PapeChanger/blob/master/papechanger.sh
 
