@@ -7,4 +7,4 @@ i3-msg "exec thunderbird"
 i3-msg "exec cinny"
 
 i3-msg "workspace 3; append_layout /home/sofamaniac/dotfiles/i3/layouts/workspace-3.json"
-i3-msg "exec kitty youtube_cli"
+i3-msg "exec kitty yama"
