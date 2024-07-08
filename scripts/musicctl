@@ -5,7 +5,7 @@
 if test -f /var/tmp/player_selector; then
 	PLAYER=$(cat /var/tmp/player_selector)
 else
-	PLAYER=""
+	PLAYER="default"
 fi
 if test $PLAYER = "default" || test -z $PLAYER; then
 	CMD="playerctl"
