@@ -80,7 +80,7 @@ def main():
             time_beginning = t
 
         start = start % len(strings)
-        print(strings[start])
+        print(strings[start], flush=True)
         time.sleep(0.100)
         last_time = t
 
