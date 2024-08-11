@@ -49,7 +49,7 @@ def prep_title(title):
     return title
 
 
-SONG_REFRESH=1.500
+SONG_REFRESH=1.00
 IN_BETWEEN_PAUSE=5.000
 ADVANCE_DELAY = 0.400
 
@@ -79,8 +79,9 @@ def main():
         if start == len(strings):
             time_beginning = t
 
-        start = start % len(strings)
-        print(strings[start], flush=True)
+        if len(strings):
+            start = start % len(strings)
+            print(strings[start], flush=True)
         time.sleep(0.100)
         last_time = t
 
