@@ -26,6 +26,9 @@ if [ -z $_XPROFILE_SOURCED ]; then
 	if [ "$HOSTNAME" = "astolfo" ]; then
 		i3-battery-popup &
 	fi
+	if [ "$HOSTNAME" = "mordred" ]; then
+		redshift &
+	fi
 
 	pkill polybar; ~/.config/polybar/launch_polybar.sh &
 
