@@ -29,8 +29,7 @@ nnoremap <leader>P "+P
 vnoremap <leader>p "+p
 vnoremap <leader>P "+P ]]
 -- NERDTree
-vim.keymap.set('n', '<leader>x', ':NERDTreeToggle<CR>', { desc = "Toggle NERDTree" })
-vim.keymap.set('n', '<F4>', ':NERDTreeToggle<CR>', { desc = "Toggle NERDTree" })
+vim.keymap.set('n', '<leader>e', ':NERDTreeToggle<CR>', { desc = "Toggle NERDTree" })
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })

@@ -61,6 +61,44 @@ local on_attach = function(_, bufnr)
 	})
 end
 
+-- Trouble configuration
+local trouble = require("trouble")
+trouble.setup()
+local nmap_trouble_toggle = function(keys, mode, desc)
+	if desc then
+		desc = 'LSP: ' .. desc
+	end
+	local f = function()
+		trouble.toggle({ mode = mode, win = { type = "split", position = "right" } })
+	end
+
+	vim.keymap.set('n', keys, f, { desc = desc })
+end
+-- adding telescope to Trouble
+local actions = require("telescope.actions")
+local open_with_trouble = require("trouble.sources.telescope").open
+
+-- Use this to add more results without clearing the trouble list
+local add_to_trouble = require("trouble.sources.telescope").add
+
+local telescope = require("telescope")
+
+telescope.setup({
+	defaults = {
+		mappings = {
+			i = { ["<c-t>"] = open_with_trouble },
+			n = { ["<c-t>"] = open_with_trouble },
+		},
+	},
+})
+
+-- Keybinds for Trouble
+nmap_trouble_toggle('<Leader>xd', "diagnostics", "Toggle Trouble Diagnostics")
+nmap_trouble_toggle('<Leader>xl', "lsp", "Toggle Trouble LSP Definitions / Symbols / ...")
+nmap_trouble_toggle('<Leader>xq', "quickfix", "Toggle Trouble Quickfix list")
+nmap_trouble_toggle('<Leader>xL', "loclist", "Toggle Trouble Location list")
+nmap_trouble_toggle('<Leader>xt', "telescope", "Send last Trouble results to Telescope")
+
 -- Turn on lsp status information
 require('fidget').setup()
 
