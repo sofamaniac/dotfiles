@@ -42,7 +42,7 @@ def run_command(cmd):
     """Return a float between 0 and 100"""
     output = subprocess.run(cmd, stdout=subprocess.PIPE)
     # extract all number (found on https://stackoverflow.com/a/29581287)
-    rr = re.findall("[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?", output.stdout.decode("utf-8"))
+    rr = re.findall(r"[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?", output.stdout.decode("utf-8"))
     if len(rr) > 0:
         val = float(rr[0]) * 100
         return val

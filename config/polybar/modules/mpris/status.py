@@ -49,7 +49,7 @@ def prep_title(title):
     return title
 
 
-SONG_REFRESH=1.00
+SONG_REFRESH=0.5
 IN_BETWEEN_PAUSE=5.000
 ADVANCE_DELAY = 0.400
 

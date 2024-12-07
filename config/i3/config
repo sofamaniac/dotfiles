@@ -45,7 +45,7 @@ floating_modifier $mod
 bindsym $mod+Return exec kitty
 
 # start file explorer
-bindsym $mod+e exec kitty -e lf
+bindsym $mod+e exec kitty -e yazi
 
 # start firefox
 bindsym $mod+g exec firefox
