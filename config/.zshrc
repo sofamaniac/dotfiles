@@ -34,6 +34,8 @@ export PATH=$PATH:/home/sofamaniac/bin
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# Skip only aliases defined in the directories.zsh lib file
+zstyle ':omz:lib:directories' aliases no
 # Path to your oh-my-zsh installation.
 export ZSH="/home/sofamaniac/.oh-my-zsh"
 
