@@ -93,6 +93,8 @@ if [[ "$#" -ne 1 ]]; then
   exit 1
 fi
 
+TARGET=$1
+
 if [[ -z $TARGET_NAME ]]; then
   TARGET_NAME=$TARGET
 fi
