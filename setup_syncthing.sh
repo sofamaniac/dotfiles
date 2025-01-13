@@ -5,13 +5,18 @@ set -euo pipefail
 Help()
 {
   # Display help message
+  echo
   echo "Setup syncthing, tailscale must be active for it to work"
   echo
-  echo "Usage: ./setup_syncthing.sh [options] <target-name>"
-  echo "<target-name>: hostname of target to connect to."
+  echo "Usage:"
+  echo "  $(basename $0) [options] <target-name>"
+  echo
+  echo "Parameters:"
+  echo "  <target-name>: hostname of target to connect to."
+  echo
   echo "Options:"
-  echo "-n, --name <display-name> name used in syncthing interface for target"
-  echo "-h, --help                show this help message"
+  echo "  -n, --name <display-name> name used in syncthing interface for target"
+  echo "  -h, --help                show this help message"
 }
 
 CheckTailscale() {
