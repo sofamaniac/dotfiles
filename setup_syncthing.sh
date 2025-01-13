@@ -24,7 +24,7 @@ CheckTailscale() {
   echo "Checking tailscale connection"
   STATUS="$(tailscale status | grep $TARGET | grep active)"
   if [[ -z "${STATUS// /}" ]]; then
-    echo "Not connected to tailscale"
+    echo "Not connected to tailscale" >&2
     exit 1
   fi
 }
@@ -34,7 +34,7 @@ GetTargetID() {
   echo "Getting $TARGET's ID"
   ID="$(ssh $TARGET syncthing --device-id)"
   if [[ -z "${ID// /}" ]]; then
-    echo "Could not get $TARGET's ID"
+    echo "Could not get $TARGET's ID" >&2
     exit 1
   fi
 }
@@ -83,13 +83,13 @@ while true; do
       shift
       break;;
     *)
-      echo "Programming error"
+      echo "Programming error" >&2
       exit 3;;
   esac
 done
 
 if [[ "$#" -ne 1 ]]; then
-  echo "$0: expecting one argument, see --help for usage"
+  echo "$0: expecting exactly one argument, see --help for usage" >&2
   exit 1
 fi
 
