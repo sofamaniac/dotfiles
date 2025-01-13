@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 
 set pipe -euo pipefail
-set -x
 
 # get ID
 ID="$(ssh mordred syncthing --device-id)"
