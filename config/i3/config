@@ -124,6 +124,9 @@ bindsym XF86AudioPlay exec $musicctl --toggle
 bindsym XF86AudioNext exec $musicctl --next
 bindsym XF86AudioPrev exec $musicctl --prev
 
+bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+
 
 # focus the child container
 #bindsym $mod+d focus child
