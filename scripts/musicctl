@@ -1,16 +1,38 @@
 #!/usr/bin/env sh
-# scripts by adi1090x
+
+Help() {
+  echo
+  echo "Control music and get info about current state of playback"
+  echo
+  echo "Usage:"
+  echo "  $(basename $0) <command>"
+  echo
+  echo "Command:"
+  echo "  song          get current song's name"
+  echo "  artist        get current song's artist"
+  echo "  status        get current status symbol"
+  echo "  time          get current progression in playing track as a percentage"
+  echo "  ctime         returns mm:ss where mm are the current minutes and ss the current seconds"
+  echo "  ttime         returns mm:ss where mm are the track length minutes and ss its seconds"
+  echo "  cover         returns a url to cover art"
+  echo "  seek n        go to n% of the tracks length"
+  echo "  toggle        cycle between play and pause"
+  echo "  n,next        advance to next track"
+  echo "  p,prev        go to previous track"
+  echo "  h,help        display this message"
+  echo
+}
 
 ## Get data
 if test -f /var/tmp/player_selector; then
-	PLAYER=$(cat /var/tmp/player_selector)
+  PLAYER=$(cat /var/tmp/player_selector)
 else
-	PLAYER="default"
+  PLAYER="default"
 fi
 if test $PLAYER = "default" || test -z $PLAYER; then
-	CMD="playerctl"
+  CMD="playerctl"
 else
-	CMD="playerctl -p $PLAYER"
+  CMD="playerctl -p $PLAYER"
 fi
 STATUS="$($CMD -s status)"
 COVER="/tmp/.music_cover.png"
@@ -18,110 +40,149 @@ MUSIC_DIR="$HOME/Music"
 
 ## Get status
 get_status() {
-	if [[ $STATUS == *"Playing"* ]]; then
-		echo "󰏤"
-	else
-		echo "󰐊"
-	fi
+  if [[ $STATUS == *"Playing"* ]]; then
+    echo "󰏤"
+  else
+    echo "󰐊"
+  fi
 }
 
 ## Get song
 get_song() {
-	song=`$CMD -s metadata xesam:title`
-	if [[ -z "$song" ]]; then
-		echo "Offline"
-	else
-		echo "$song"
-	fi	
+  song=$($CMD -s metadata xesam:title)
+  if [[ -z "$song" ]]; then
+    echo "Offline"
+  else
+    echo "$song"
+  fi
 }
 
 ## Get artist
 get_artist() {
-	artist=`$CMD -s metadata xesam:artist`
-	if [[ -z "$artist" ]]; then
-		echo ""
-	else
-		echo "$artist"
-	fi	
+  artist=$($CMD -s metadata xesam:artist)
+  if [[ -z "$artist" ]]; then
+    echo ""
+  else
+    echo "$artist"
+  fi
 }
 
 ## Get time
 get_time() {
-	ctime=`$CMD -s position --format "{{ position }}"`
-	ttime=`$CMD -s metadata mpris:length`
-	time=`awk -v ctime="$ctime" -v ttime="$ttime" 'BEGIN{ printf "%d\n", (100 * ctime) /ttime }'`
-	if [[ -z "$time" ]]; then
-		echo "0"
-	else
-		echo "$time"
-	fi	
+  ctime=$($CMD -s position --format "{{ position }}")
+  ttime=$($CMD -s metadata mpris:length)
+  time=$(awk -v ctime="$ctime" -v ttime="$ttime" 'BEGIN{ printf "%d\n", (100 * ctime) /ttime }')
+  if [[ -z "$time" ]]; then
+    echo "0"
+  else
+    echo "$time"
+  fi
 }
 get_ctime() {
-	ctime=`$CMD -s position --format "{{ position }}"`
-	if [[ -z "$ctime" ]]; then
-		ctime="00:00"
-	else
-		ctime=$(echo $ctime | awk '{ printf "%02d:%02d\n", $1 / 60, $1 % 60 }')
-	fi
-	echo $ctime
+  ctime=$($CMD -s position --format "{{ position }}")
+  if [[ -z "$ctime" ]]; then
+    ctime="00:00"
+  else
+    ctime=$(echo $ctime | awk '{ printf "%02d:%02d\n", $1 / 60, $1 % 60 }')
+  fi
+  echo $ctime
 }
 get_ttime() {
-	ttime=`$CMD -s metadata mpris:length`
-	if [[ -z "$ttime" ]]; then
-		ttime="00:00"
-	else
-		ttime=$(($ttime / 1000000))
-		ttime=$(echo $ttime | awk '{ printf "%02d:%02d\n", $1 / 60, $1 % 60 }')
-	fi
-	echo $ttime
+  ttime=$($CMD -s metadata mpris:length)
+  if [[ -z "$ttime" ]]; then
+    ttime="00:00"
+  else
+    ttime=$(($ttime / 1000000))
+    ttime=$(echo $ttime | awk '{ printf "%02d:%02d\n", $1 / 60, $1 % 60 }')
+  fi
+  echo $ttime
 }
 
 ## Get cover
 get_cover() {
-	COVER=`$CMD -s metadata mpris:artUrl`
-	# Check if the file has a embbeded album art
-	if [ -n "$COVER" ];then
-		echo -n "$COVER"
-	else
-		echo "images/music.png"
-	fi
+  COVER=$($CMD -s metadata mpris:artUrl)
+  # Check if the file has a embbeded album art
+  if [ -n "$COVER" ]; then
+    echo -n "$COVER"
+  else
+    echo "images/music.png"
+  fi
 }
 
 ## control player
 player_ctl() {
-	$CMD $1
+  $CMD $1
 }
 
 ## seek absolute percent
 seek() {
-	ttime=`$CMD -s metadata mpris:length`
-	new_time=`awk -v target="$1" -v len="$ttime" 'BEGIN{ printf "%d", target / 100 * len }'`
-	$CMD position $new_time
+  ttime=$($CMD -s metadata mpris:length)
+  new_time=$(awk -v target="$1" -v len="$ttime" 'BEGIN{ printf "%d", target / 100 * len }')
+  $CMD position $new_time
 }
 
-## Execute accordingly
-if [[ "$1" == "--song" ]]; then
-	get_song
-elif [[ "$1" == "--artist" ]]; then
-	get_artist
-elif [[ "$1" == "--status" ]]; then
-	get_status
-elif [[ "$1" == "--time" ]]; then
-	get_time
-elif [[ "$1" == "--ctime" ]]; then
-	get_ctime
-elif [[ "$1" == "--ttime" ]]; then
-	get_ttime
-elif [[ "$1" == "--cover" ]]; then
-	get_cover
-elif [[ "$1" == "--seek" ]]; then
-	# musicctl --seek n
-	# goes to n% of playing song
-	seek $2
-elif [[ "$1" == "--toggle" ]]; then
-	{ player_ctl "play-pause"; }
-elif [[ "$1" == "--next" ]]; then
-	{ player_ctl "next"; }
-elif [[ "$1" == "--prev" ]]; then
-	{ player_ctl "previous"; }
+while true; do
+  case "$1" in
+  song)
+    get_song
+    exit 0
+    ;;
+  artist)
+    get_artist
+    exit 0
+    ;;
+  status)
+    get_status
+    exit 0
+    ;;
+  time)
+    get_time
+    exit 0
+    ;;
+  ctime)
+    get_ctime
+    exit 0
+    ;;
+  ttime)
+    get_ttime
+    exit 0
+    ;;
+  cover)
+    get_cover
+    exit 0
+    ;;
+  seek)
+    seek $2
+    exit 0
+    ;;
+  toggle)
+    player_ctl "play-pause"
+    exit 0
+    ;;
+  n | next)
+    player_ctl "next"
+    exit 0
+    ;;
+  p | prev)
+    player_ctl "previous"
+    exit 0
+    ;;
+  h | help | -h | --help)
+    Help
+    exit 0
+    ;;
+  --)
+    shift
+    break
+    ;;
+  *)
+    break
+    ;;
+  esac
+done
+
+if [[ -z "$1" ]]; then
+  echo "missing option, see '$(basename $0) help' for more info"
+else
+  echo "unknown argument '$1', see '$(basename $0) help' for a list of available commands"
 fi
