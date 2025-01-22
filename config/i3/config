@@ -120,9 +120,9 @@ bindsym XF86AudioMute exec $volumectl --mute vol
 
 # media control
 set $musicctl ~/dotfiles/scripts/musicctl
-bindsym XF86AudioPlay exec $musicctl --toggle
-bindsym XF86AudioNext exec $musicctl --next
-bindsym XF86AudioPrev exec $musicctl --prev
+bindsym XF86AudioPlay exec $musicctl toggle
+bindsym XF86AudioNext exec $musicctl next
+bindsym XF86AudioPrev exec $musicctl prev
 
 bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
