@@ -9,36 +9,73 @@ Help() {
   echo "Control the volume of the speaker and microphone."
   echo
   echo "Usage:"
-  echo "  $(basename "$0") (mic|vol) <command>"
-  echo "  $(basename "$0") --help"
+  echo "  $(basename "$0") <command> (mic|vol)"
   echo
   echo "Commands:"
-  echo "  get         print the current volume as a number between 0 and 100, is called by default if no command is provided"
-  echo "  set <val>   set the volume to the specified value (a number between 0 and 100)"
-  echo "  mute        toggle mute on the target"
+  echo "  -h, --help                  display this message"
+  echo "  -g, --get                   print the current volume as a number between 0 and 100, is called by default if no command is provided"
+  echo "  -s, --set <val>             set the volume to the specified value (a number between 0 and 100)"
+  echo "  -i, --increase [+-]<val>    add the value to the volume (val should be between 0 and 100)"
+  echo "  -m, --mute                  toggle mute on the target"
 }
 
 GetVolume() {
   local volume
   volume=$(wpctl get-volume $TARGET | cut -d ' ' -f 2)
-  volume=$(echo "$volume" | awk '{pcts = $0 * 100; print pcts}' -)
-  echo "$volume"
+  volume=$(echo "$volume * 100" | bc)
+  printf "%.0f\n" $volume
 }
 
 SetVolume() {
   local target_vol
-  target_vol=$(echo "$1" | awk '{target = $0 - ($0 %5); print target/100}' -)
+  target_vol=$(printf "(%.1f - (%.1f %% 5)) / 100.0\n" $1 | bc -l)
   wpctl set-volume $TARGET "$target_vol" --limit 1
 }
 
-PARSED="$(getopt --options=h --longoptions=help --name="$0" -- "$@")"
+IncreaseVolume() {
+  local current_volume
+  local target_vol
+  local right
+  if [[ "$1" =~ ^[+-][0-9]+$ ]]; then
+    right=$1
+  elif [[ "$1" =~ ^[0-9]+$ ]]; then
+    right="+$1"
+  else
+    echo "Invalid number '$1'."
+    exit 1
+  fi
+  current_volume=$(GetVolume)
+  target_vol=$(echo "($current_volume $right)/100" | bc -l)
+  wpctl set-volume $TARGET "$target_vol" --limit 1
+}
+
+PARSED="$(getopt --options=h,g,s:,i: --longoptions=help,get,set:,increase: --name="$0" -- "$@")"
 eval set -- "$PARSED"
 
+args=0
+to_get=false
+to_set=false
+to_set_target=
+to_increase=false
+to_increase_target=
 while true; do
   case "$1" in
   -h | --help)
     Help
     exit 0
+    ;;
+  -g | --get)
+    to_get=true
+    ;;
+  -s | --set)
+    to_set=true
+    shift 1
+    to_set_target=$1
+    ;;
+  -i | --increase)
+    to_increase=true
+    shift 1
+    to_increase_target=$1
     ;;
   --)
     shift 1
@@ -49,6 +86,7 @@ while true; do
     exit 3
     ;;
   esac
+  shift 1
 done
 
 TARGET=
@@ -71,26 +109,13 @@ vol)
   ;;
 esac
 
-case "${1:-}" in
-'' | get)
+if $to_get; then
+  echo $to_get
   GetVolume
-  exit 0
-  ;;
-set)
-  shift 1
-  if [[ -z "${1:-}" ]]; then
-    echo "Missing target value"
-    exit 1
-  fi
-  SetVolume "$1"
-  exit 0
-  ;;
-mute)
-  wpctl set-mute $TARGET toggle
-  exit 0
-  ;;
-*)
-  echo "Unknown command '$1', see --help for more information"
-  exit 1
-  ;;
-esac
+elif $to_set; then
+  SetVolume $to_set_target
+elif $to_increase; then
+  IncreaseVolume $to_increase_target
+fi
+
+exit 0
