@@ -9,9 +9,9 @@ Help() {
   echo "Control the volume of the speaker and microphone."
   echo
   echo "Usage:"
-  echo "  $(basename "$0") <command> (mic|vol)"
+  echo "  $(basename "$0") [options] (mic|vol)"
   echo
-  echo "Commands:"
+  echo "Options:"
   echo "  -h, --help                  display this message"
   echo "  -g, --get                   print the current volume as a number between 0 and 100, is called by default if no command is provided"
   echo "  -s, --set <val>             set the volume to the specified value (a number between 0 and 100)"
@@ -41,7 +41,7 @@ IncreaseVolume() {
   elif [[ "$1" =~ ^[0-9]+$ ]]; then
     right="+$1"
   else
-    echo "Invalid number '$1'."
+    echo "Invalid number '$1'." >&2
     exit 1
   fi
   current_volume=$(GetVolume)
@@ -100,11 +100,13 @@ vol)
   shift 1
   ;;
 "")
-  echo "Expected target, see --help for how to use command"
+  echo "Expected target, see --help for how to use command" >&2
+  echo
+  Help
   exit 1
   ;;
 *)
-  echo "Unknown target '$1', see --help for more information"
+  echo "Unknown target '$1', see --help for more information" >&2
   exit 1
   ;;
 esac
