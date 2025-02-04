@@ -114,8 +114,8 @@ bindsym $mod+a focus parent
 
 # volume control
 set $volumectl ~/dotfiles/scripts/volumectl
-bindsym XF86AudioRaiseVolume exec $volumectl --set vol 5%+
-bindsym XF86AudioLowerVolume exec $volumectl --set vol 5%-
+bindsym XF86AudioRaiseVolume exec $volumectl --set vol 5
+bindsym XF86AudioLowerVolume exec $volumectl --set vol -5
 bindsym XF86AudioMute exec $volumectl --mute vol
 
 # media control
