@@ -4,25 +4,26 @@ set -euo pipefail
 
 Help()
 {
-  # Display help message
   echo
   echo "Setup syncthing, tailscale must be active for it to work"
   echo
   echo "Usage:"
-  echo "  $(basename $0) [options] <target-name>"
+  echo "  $(basename $0) [options] <target>"
   echo
   echo "Parameters:"
-  echo "  <target-name>: hostname of target to connect to."
+  echo "  <target>: hostname of target to connect to."
   echo
   echo "Options:"
-  echo "  -n, --name <display-name> name used in syncthing interface for target"
+  echo "  -n, --name <display-name> name used locally in syncthing interface for <target>"
   echo "  -h, --help                show this help message"
+  echo "  -l, --list                list all available folders' id on <target-name>"
 }
 
 CheckTailscale() {
   # check if tailscale is up
   echo "Checking tailscale connection"
-  STATUS="$(tailscale ping $TARGET | grep pong)"
+  # grep returns 0 when it found a result, 1 when it did not and 2 if there was an error
+  STATUS="$(tailscale ping $TARGET | { grep pong || test $?=1; })"
   if [[ -z "${STATUS// /}" ]]; then
     echo "Not connected to tailscale" >&2
     exit 1
