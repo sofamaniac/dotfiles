@@ -23,7 +23,7 @@ GetVolume() {
   local volume
   volume=$(wpctl get-volume $TARGET | cut -d ' ' -f 2)
   volume=$(echo "$volume * 100" | bc)
-  printf "%.0f\n" $volume
+  LC_NUMERIC="en_US.UTF-8" printf "%.0f\n" $volume
 }
 
 SetVolume() {
@@ -112,7 +112,6 @@ vol)
 esac
 
 if $to_get; then
-  echo $to_get
   GetVolume
 elif $to_set; then
   SetVolume $to_set_target
