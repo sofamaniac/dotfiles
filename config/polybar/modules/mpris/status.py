@@ -60,28 +60,33 @@ def main():
     last_song_refresh=time.time()
     time_beginning = time.time()
     time_advance = time.time()
+    need_update = False
     strings = []
     while True:
         t = time.time()
         if t - last_song_refresh:
             title, changed = get_track()
             if changed:
+                need_update = True
                 start = 0
                 time_beginning = t
                 strings = make_all(title)
         if start == 0 and t - time_beginning > IN_BETWEEN_PAUSE:
+            need_update = True
             start += 1
             time_advance = t
         if start > 0 and t - time_advance > ADVANCE_DELAY:
+            need_update = True
             start += 1
             time_advance = t
 
         if start == len(strings):
             time_beginning = t
 
-        if len(strings):
+        if len(strings) and need_update:
             start = start % len(strings)
-            print(strings[start], flush=True)
+            need_update = False
+            print(strings[start], flush=True, end='\r')
         time.sleep(0.100)
         last_time = t
 
