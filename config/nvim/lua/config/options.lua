@@ -6,3 +6,6 @@ local opt = vim.opt
 opt.clipboard = ""
 
 vim.o.breakindent = true
+
+-- try to fix escape delay while in tmux
+vim.o.ttimeoutlen = 0
