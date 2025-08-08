@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+set -euo pipefail
+
+DEST="$HOME/Musics/YoutubePlaylists/musiques/"
+PLAYLIST_ID="PLhcRZbMC1DBerCC_T_09x3MZfh1mmS7aY"
+
+yt-dlp \
+  -P "$DEST" \
+  --download-archive "$DEST/archive.txt" \
+  --extract-audio \
+  --audio-quality 0 \
+  --embed-metadata \
+  --embed-thumbnail \
+  --merge-output-format mp4 \
+  --sponsorblock-remove default \
+  "https://www.youtube.com/playlist?list=$PLAYLIST_ID"
