@@ -55,8 +55,8 @@ ConnectOne() {
   local path=
   local label=
   
-  path=$(ssh cli config folders $1 path get)
-  label=$(ssh cli config folders $1 label get)
+  path=$(ssh $TARGET syncthing cli config folders $1 path get)
+  label=$(ssh $TARGET syncthing cli config folders $1 label get)
 
   echo "Settig up $label"
 
