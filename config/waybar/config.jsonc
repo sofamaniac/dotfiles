@@ -1,0 +1,121 @@
+
+{
+  "layer": "top",
+  "position": "top",
+  "height": 25,
+  "modules-left": ["sway/workspaces"],
+  "modules-center": [
+    "custom/player-selector",
+    "custom/player-manager",
+    "custom/player-prev",
+    "custom/player-pause",
+    "custom/player-next",
+    "custom/player-info",
+    "clock"
+  ],
+  "modules-right": [
+    "pulseaudio",
+    "custom/light",
+    "custom/sysinfo",
+    "disk",
+    "temperature",
+    "memory",
+    "cpu",
+    "battery",
+    "network",
+    "tray",
+    "custom/powermenu"
+  ],
+  "sway/workspaces": {
+    "disable-scroll": false,
+    "all-outputs": false,
+    "format": "{icon}",
+    "format-icons": {
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9"
+    }
+  },
+  "clock": {
+    "format": "{:%Y-%m-%d %H:%M:%S}",
+    "interval": 1
+  },
+  "custom/player-selector": {
+    "format": "",
+    "exec": "~/.config/polybar/modules/mpris/player-selector.sh"
+  },
+  "custom/player-prev": {
+    "format": "",
+    "exec": "~/scripts/musicctl prev"
+  },
+  "custom/player-pause": {
+    "exec": "~/scripts/musicctl status",
+    "interval": 1,
+    "on-click": "~/scripts/musicctl toggle"
+  },
+  "custom/player-next": {
+    "format": "",
+    "exec": "~/scripts/musicctl next"
+  },
+  "custom/player-info": {
+    "exec": "~/.config/polybar/modules/mpris/status.py",
+    "interval": 1,
+    "return-type": "json",
+    "format": "{}"
+  },
+  "custom/player-manager": {
+    "exec": "~/.config/polybar/modules/mpris/player-manager.sh",
+    "interval": 1
+  },
+  "custom/sysinfo": {
+    "format": "Sys:",
+    "exec": "/home/sofamaniac/.config/polybar/modules/sysinfo.sh"
+  },
+  "custom/light": {
+    "exec": "brightnessctl get",
+    "interval": 1,
+    "format": "L: {}",
+    "on-scroll-up": "brightnessctl set 5%+",
+    "on-scroll-down": "brightnessctl set 5%-"
+  },
+  "pulseaudio": {
+    "format": "V: {volume}%",
+    "format-muted": "muted"
+  },
+  "battery": {
+    "format": "{capacity}% {icon}",
+    "format-charging": " {capacity}%",
+    "format-full": " {capacity}%",
+    "interval": 30
+  },
+  "memory": {
+    "format": "M: {}%",
+    "interval": 2
+  },
+  "cpu": {
+    "format": "C: {usage}%",
+    "interval": 2
+  },
+  "temperature": {
+    "format": "T: {temperatureC}°C",
+    "critical-threshold": 60,
+    "interval": 5
+  },
+  "disk": {
+    "format": "Disk: {percentage_used}%",
+    "path": "/"
+  },
+  "network": {
+    "format-wifi": "{essid} ",
+    "format-ethernet": " {ipaddr}",
+    "interval": 3
+  },
+  "tray":{},
+    "custom/powermenu": {}
+}

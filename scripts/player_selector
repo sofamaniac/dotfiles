@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+# Show fuzzel prompt and capture the selected value
+selection=$(playerctl -l | fuzzel --dmenu -p "Choose a player:")
+
+# Check if selection is not empty
+if [[ -n "$selection" ]]; then
+    echo "$selection" > /var/tmp/player_selector
+fi
+
