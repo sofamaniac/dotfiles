@@ -10,8 +10,8 @@ if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
 fi
 
-alias ll="ls -a"
-alias lll="ls -alh"
+alias l="eza -al"
+alias ll="eza -alh"
 alias add_alias="${=EDITOR} ${ZDOTDIR:-$HOME}/.zsh_aliases; source ${ZDOTDIR:-$HOME}/.zsh_aliases"
 alias clr="clear"
 alias vi="vim"
