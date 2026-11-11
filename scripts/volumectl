@@ -1,122 +1,130 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
 
-set -euo pipefail
+import argparse
+import re
+import subprocess
+import sys
 
-MICROPHONE="@DEFAULT_AUDIO_SOURCE@"
-SPEAKER="@DEFAULT_AUDIO_SINK@"
+MICROPHONE = "@DEFAULT_AUDIO_SOURCE@"
+SPEAKER = "@DEFAULT_AUDIO_SINK@"
 
-Help() {
-  echo "Control the volume of the speaker and microphone."
-  echo
-  echo "Usage:"
-  echo "  $(basename "$0") [options] (mic|vol)"
-  echo
-  echo "Options:"
-  echo "  -h, --help                  display this message"
-  echo "  -g, --get                   print the current volume as a number between 0 and 100, is called by default if no command is provided"
-  echo "  -s, --set <val>             set the volume to the specified value (a number between 0 and 100)"
-  echo "  -i, --increase [+-]<val>    add the value to the volume (val should be between 0 and 100)"
-  echo "  -m, --mute                  toggle mute on the target"
-}
 
-GetVolume() {
-  local volume
-  volume=$(wpctl get-volume $TARGET | cut -d ' ' -f 2)
-  volume=$(echo "$volume * 100" | bc)
-  LC_NUMERIC="en_US.UTF-8" printf "%.0f\n" $volume
-}
+def run_wpctl(*args):
+  """Execute wpctl and return its output."""
+  try:
+    result = subprocess.run(
+        ["wpctl", *args],
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    return result.stdout.strip()
+  except FileNotFoundError:
+    print("Error: wpctl is not installed.", file=sys.stderr)
+    sys.exit(1)
+  except subprocess.CalledProcessError as e:
+    print(f"wpctl error: {e.stderr.strip()}", file=sys.stderr)
+    sys.exit(1)
 
-SetVolume() {
-  local target_vol
-  target_vol=$(printf "(%.1f - (%.1f %% 5)) / 100.0\n" $1 | bc -l)
-  wpctl set-volume $TARGET "$target_vol" --limit 1
-}
+def run_set_volume(target, volume, suffix=""):
+  run_wpctl("set-volume", target, f"{volume}%{suffix}", "--limit", "1")
 
-IncreaseVolume() {
-  local current_volume
-  local target_vol
-  local right
-  if [[ "$1" =~ ^[+-][0-9]+$ ]]; then
-    right=$1
-  elif [[ "$1" =~ ^[0-9]+$ ]]; then
-    right="+$1"
-  else
-    echo "Invalid number '$1'." >&2
-    exit 1
-  fi
-  current_volume=$(GetVolume)
-  target_vol=$(echo "($current_volume $right)/100" | bc -l)
-  wpctl set-volume $TARGET "$target_vol" --limit 1
-}
 
-PARSED="$(getopt --options=h,g,s:,i: --longoptions=help,get,set:,increase: --name="$0" -- "$@")"
-eval set -- "$PARSED"
+def get_volume(target):
+  """Get current volume as an integer between 0 and 100."""
+  output = run_wpctl("get-volume", target)
 
-args=0
-to_get=false
-to_set=false
-to_set_target=
-to_increase=false
-to_increase_target=
-while true; do
-  case "$1" in
-  -h | --help)
-    Help
-    exit 0
-    ;;
-  -g | --get)
-    to_get=true
-    ;;
-  -s | --set)
-    to_set=true
-    shift 1
-    to_set_target=$1
-    ;;
-  -i | --increase)
-    to_increase=true
-    shift 1
-    to_increase_target=$1
-    ;;
-  --)
-    shift 1
-    break
-    ;;
-  *)
-    echo "Programming error"
-    exit 3
-    ;;
-  esac
-  shift 1
-done
+  match = re.search(r"Volume:\s*([\d.]+)", output)
+  if not match:
+    print("Error: Could not read volume.", file=sys.stderr)
+    sys.exit(1)
 
-TARGET=
-case "${1:-}" in
-mic)
-  TARGET=$MICROPHONE
-  shift 1
-  ;;
-vol)
-  TARGET=$SPEAKER
-  shift 1
-  ;;
-"")
-  echo "Expected target, see --help for how to use command" >&2
-  echo
-  Help
-  exit 1
-  ;;
-*)
-  echo "Unknown target '$1', see --help for more information" >&2
-  exit 1
-  ;;
-esac
+  return round(float(match.group(1)) * 100)
 
-if $to_get; then
-  GetVolume
-elif $to_set; then
-  SetVolume $to_set_target
-elif $to_increase; then
-  IncreaseVolume $to_increase_target
-fi
 
-exit 0
+def set_volume(target, value):
+  """Set volume, rounded down to the nearest 5."""
+  if not 0 <= value <= 100:
+    raise ValueError("Volume must be between 0 and 100.")
+
+  value = value - (value % 5)
+  run_set_volume(target, value)
+
+
+def increase_volume(target, value):
+  """Increase or decrease volume."""
+  if not re.fullmatch(r"[+-]?\d+", value):
+    raise ValueError(f"Invalid number '{value}'.")
+
+  amount = int(value)
+  run_set_volume(target, abs(amount), "-" if amount < 0 else "+")
+
+
+def toggle_mute(target):
+  """Toggle mute state."""
+  run_wpctl("set-mute", target, "toggle")
+
+
+def main():
+  parser = argparse.ArgumentParser(
+      description="Control the volume of the speaker and microphone."
+  )
+
+  parser.add_argument(
+      "target",
+      choices=["mic", "vol"],
+      help="Target: mic (microphone) or vol (speaker)"
+  )
+
+  actions = parser.add_mutually_exclusive_group()
+
+  actions.add_argument(
+      "-g", "--get",
+      action="store_true",
+      help="Get current volume (default)"
+  )
+
+  actions.add_argument(
+      "-s", "--set",
+      type=int,
+      metavar="<val>",
+      help="Set volume"
+  )
+
+  actions.add_argument(
+      "-i", "--increase",
+      metavar="[+-]<val>",
+      help="Increase/decrease volume"
+  )
+
+  actions.add_argument(
+      "-m", "--mute",
+      action="store_true",
+      help="Toggle mute"
+  )
+
+  args = parser.parse_args()
+
+  target = MICROPHONE if args.target == "mic" else SPEAKER
+
+  try:
+    if args.mute:
+        toggle_mute(target)
+
+    elif args.set is not None:
+        set_volume(target, args.set)
+
+    elif args.increase is not None:
+        increase_volume(target, args.increase)
+
+    else:
+        print(get_volume(target))
+
+  except ValueError as e:
+    print(f"Error: {e}", file=sys.stderr)
+    sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
+
